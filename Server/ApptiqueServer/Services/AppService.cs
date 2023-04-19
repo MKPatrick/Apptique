@@ -28,7 +28,7 @@ namespace ApptiqueServer.Services
             await stream.CopyToAsync(fs);
             stream.Close();
             fs.Close();
-            return fileName;
+            return $"Apps\\{fileName}.apk";
         }
 
         public async Task UpdateApp(AppModel appModel)

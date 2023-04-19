@@ -35,8 +35,12 @@ namespace ApptiqueServer
             app.UseRouting();
 
             app.MapBlazorHub();
-            app.MapFallbackToPage("/_Host");
-
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+ 
+                endpoints.MapFallbackToPage("/_Host");
+            });
             app.Run();
         }
     }
