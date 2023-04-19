@@ -6,6 +6,8 @@
 
     <MudTextField @bind-Value="appRevision.AppVersionName" Required=true Label="Version Name" Variant="Variant.Text"></MudTextField>
     <MudNumericField @bind-Value="appRevision.AppVersion" Label="Version Nr" Variant="Variant.Text"></MudNumericField>
+    <MudTextField @bind-Value="appRevision.ChangeSet" Required=true Label="Changeset" Variant="Variant.Text"></MudTextField>
+
     <br />
     <MudFileUpload Style="display:inline" T="IBrowserFile" FilesChanged="UploadAPK" Context="cntxt">
         <ButtonTemplate>

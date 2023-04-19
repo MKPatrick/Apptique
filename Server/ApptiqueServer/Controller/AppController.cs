@@ -1,7 +1,6 @@
 ﻿using ApptiqueServer.Config;
 using ApptiqueServer.Models;
 using ApptiqueServer.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -29,5 +28,11 @@ namespace ApptiqueServer.Controller
                 return new List<AppModel>();
             return await _appService.GetAllApps();
         }
+
+
+
+
+
+
     }
 }

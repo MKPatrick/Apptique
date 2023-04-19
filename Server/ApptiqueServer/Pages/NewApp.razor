@@ -57,6 +57,7 @@
         {
             var apkName = await appservice.CreateAPKPhysically(apk);
             appRevisionsModel.ApkPath = apkName;
+            appRevisionsModel.ChangeSet = "INITAL RELEASE";
             appRevisionsModel.ReleaseDate = DateTime.Now;
             await appservice.CreateNewApp(appModel);
             navigater.NavigateTo("");
