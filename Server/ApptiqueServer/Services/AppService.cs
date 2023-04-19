@@ -14,6 +14,11 @@ namespace ApptiqueServer.Services
             this.env = env;
         }
 
+        public async Task RemoveAPKPhysically(string apkFile)
+        {
+            File.Delete($"{env.WebRootPath}\\{apkFile}");
+        }
+
 
         public async Task<string> CreateAPKPhysically(IBrowserFile apkFile)
         {
@@ -33,7 +38,7 @@ namespace ApptiqueServer.Services
 
         public async Task UpdateApp(AppModel appModel)
         {
-            
+
         }
 
         public async Task CreateNewApp(AppModel appModel)

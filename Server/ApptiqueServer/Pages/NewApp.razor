@@ -5,6 +5,8 @@
 <EditForm OnValidSubmit="Submit" Model="appModel">
 
     <MudTextField @bind-Value="appModel.AppName" Required=true Label="App Name" Variant="Variant.Text"></MudTextField>
+    <MudTextField @bind-Value="appModel.PackageName" Required=true Label="Package Name com.example.myapp" Variant="Variant.Text"></MudTextField>
+
     <MudTextField @bind-Value="appModel.Description" Label="App Description" Variant="Variant.Text"></MudTextField>
     <MudNumericField @bind-Value="appRevisionsModel.AppVersion" Label="App Version Nr" Variant="Variant.Text"></MudNumericField>
     <MudTextField @bind-Value="appRevisionsModel.AppVersionName" Label="App Version Name" Variant="Variant.Text"></MudTextField>

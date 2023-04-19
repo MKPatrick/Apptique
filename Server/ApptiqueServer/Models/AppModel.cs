@@ -7,6 +7,7 @@ namespace ApptiqueServer.Models
         public int ID { get; set; }
         [Required]
         public string AppName { get; set; }
+        public string PackageName { get; set; }
         public string AppIcon { get; set; }
         public string Description { get; set; }
         public List<AppRevisionsModel> Revisions { get; set; } = new List<AppRevisionsModel>();

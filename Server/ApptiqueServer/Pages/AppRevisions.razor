@@ -1,5 +1,6 @@
 ﻿@page "/AppRevisions/{AppID}"
 @inject IAppService appService;
+@inject IJSRuntime JsRuntime;
 @inject NavigationManager navigater;
 <h3>AppRevisions</h3>
 <MudButton @onclick="@(()=>navigater.NavigateTo("NewRevision/"+ app.ID))" Variant="Variant.Filled" Color="Color.Primary">Create New Release</MudButton>
@@ -7,9 +8,16 @@
     <Columns>
         <PropertyColumn Property="x => x.ID" Title="ID" />
         <PropertyColumn Property="x => x.AppVersion" />
-        <PropertyColumn Property="x => x.AppVersionName"  />
-        <PropertyColumn Property="x => x.ApkPath"  />
-        <PropertyColumn Property="x => x.ReleaseDate"  />
+        <PropertyColumn Property="x => x.AppVersionName" />
+        <PropertyColumn Property="x => x.ApkPath" />
+        <PropertyColumn Property="x => x.ReleaseDate" />
+        <TemplateColumn StickyRight="true">
+            <CellTemplate>
+
+                <MudIconButton OnClick="@(()=>Delete(context.Item))" Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" />
+
+            </CellTemplate>
+        </TemplateColumn>
     </Columns>
 </MudDataGrid>
 
@@ -18,11 +26,22 @@
 
     private AppModel app;
     [Parameter]
-    public string AppID{ get; set; }
+    public string AppID { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        app= await appService.GetAppByID(Convert.ToInt32(AppID));
+        app = await appService.GetAppByID(Convert.ToInt32(AppID));
         app.Revisions.Reverse();
+    }
+
+    async Task Delete(AppRevisionsModel revision)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+        if (confirmed)
+        {
+            await appService.RemoveAPKPhysically(revision.ApkPath);
+            app.Revisions.Remove(revision);
+            await appService.UpdateApp(app);
+        }
     }
 }

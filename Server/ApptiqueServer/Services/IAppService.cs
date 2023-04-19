@@ -6,6 +6,7 @@ namespace ApptiqueServer.Services
     public interface IAppService
     {
         Task UpdateApp(AppModel appModel);
+        Task RemoveAPKPhysically(string apkFile);
         Task CreateNewApp(AppModel appModel);
         Task DeleteAppById(int id);
         Task<List<AppModel>> GetAllApps();

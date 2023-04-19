@@ -1,26 +1,27 @@
 ﻿@page "/"
+@inject IJSRuntime JsRuntime;
 @inject IAppService appService;
 @inject NavigationManager navigate;
 <h1>App Overview</h1>
 
 <MudDataGrid Items="apps">
     <Columns>
-        <PropertyColumn Property="x => x.ID" Title="App Identifier" />
+        <PropertyColumn Property="x => x.PackageName" Title="App Package Name" />
         <TemplateColumn>
             <CellTemplate>
                 <MudImage Width="50" Height="50" Src="@context.Item.AppIcon" Alt="Mony the dog" Elevation="25" Class="rounded-lg" />
             </CellTemplate>
         </TemplateColumn>
-            <PropertyColumn Property="x => x.AppName" />
-   
-        
+        <PropertyColumn Property="x => x.AppName" />
+
+
         <PropertyColumn Property="x => x.CurrentReleaseVersion" />
         <PropertyColumn Property="x => x.LastReleaseDate" Title="Release Date" />
         <TemplateColumn StickyRight="true">
             <CellTemplate>
                 <MudIconButton Icon="@Icons.Material.Outlined.Update" OnClick="@(()=>NavigateToRevisions(context.Item))" Size="@Size.Small" />
 
-                <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Outlined.Delete" OnClick="@(()=>Delete(context.Item))" Size="@Size.Small" />
 
             </CellTemplate>
         </TemplateColumn>
@@ -39,5 +40,19 @@
     void NavigateToRevisions(AppModel app)
     {
         navigate.NavigateTo($"AppRevisions/{app.ID}");
+    }
+
+    async Task Delete(AppModel app)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+        if (confirmed)
+        {
+            foreach (var rev in app.Revisions)
+            {
+                await appService.RemoveAPKPhysically(rev.ApkPath);
+            }
+
+            await appService.DeleteAppById(app.ID);
+        }
     }
 }
