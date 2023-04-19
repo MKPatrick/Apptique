@@ -10,4 +10,8 @@
     <PackageReference Include="MudBlazor" Version="6.2.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Apps\" />
+  </ItemGroup>
+
 </Project>

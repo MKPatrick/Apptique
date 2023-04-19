@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject IAppService appService;
+@inject NavigationManager navigate;
 <h1>App Overview</h1>
 
 <MudDataGrid Items="apps">
@@ -17,8 +18,8 @@
         <PropertyColumn Property="x => x.LastReleaseDate" Title="Release Date" />
         <TemplateColumn StickyRight="true">
             <CellTemplate>
-                <MudIconButton Icon="@Icons.Material.Outlined.Update" Size="@Size.Small" />
-                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Outlined.Update" OnClick="@(()=>NavigateToRevisions(context.Item))" Size="@Size.Small" />
+
                 <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" />
 
             </CellTemplate>
@@ -38,5 +39,10 @@
         testapp.AppName = "Test APp";
         await appService.CreateNewApp(testapp);
         apps = await appService.GetAllApps();
+    }
+
+    void NavigateToRevisions(AppModel app)
+    {
+        navigate.NavigateTo($"AppRevisions/{app.ID}");
     }
 }

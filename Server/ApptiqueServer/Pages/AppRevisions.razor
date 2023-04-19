@@ -1,0 +1,26 @@
+﻿@page "/AppRevisions/{AppID}"
+@inject IAppService appService;
+<h3>AppRevisions</h3>
+<MudButton Variant="Variant.Filled" Color="Color.Primary">Create New Release</MudButton>
+<MudDataGrid Items="app.Revisions">
+    <Columns>
+        <PropertyColumn Property="x => x.ID" Title="ID" />
+        <PropertyColumn Property="x => x.AppVersion" />
+        <PropertyColumn Property="x => x.AppVersionName"  />
+        <PropertyColumn Property="x => x.ApkPath"  />
+        <PropertyColumn Property="x => x.ReleaseDate"  />
+    </Columns>
+</MudDataGrid>
+
+@code {
+
+
+    private AppModel app;
+    [Parameter]
+    public string AppID{ get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        app= await appService.GetAppByID(Convert.ToInt32(AppID));
+    }
+}
