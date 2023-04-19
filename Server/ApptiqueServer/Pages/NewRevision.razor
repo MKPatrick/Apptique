@@ -35,8 +35,6 @@
         app = await appService.GetAppByID(Convert.ToInt32(AppID));
     }
 
-
-
     async Task Submit()
     {
         if (apk != null)
@@ -49,7 +47,6 @@
             navigater.NavigateTo("");
         }
     }
-
 
     private async Task UploadAPK(IBrowserFile file)
     {

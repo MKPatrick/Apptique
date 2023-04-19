@@ -1,3 +1,4 @@
+using ApptiqueServer.Config;
 using ApptiqueServer.Data;
 using ApptiqueServer.Services;
 using Microsoft.AspNetCore.Components;
@@ -17,7 +18,8 @@ namespace ApptiqueServer
             builder.Services.AddServerSideBlazor();
             builder.Services.AddTransient<IAppService, AppService>();
             builder.Services.AddMudServices();
-
+            builder.Services.Configure<SecretModel>(
+    builder.Configuration.GetSection("Secret"));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
