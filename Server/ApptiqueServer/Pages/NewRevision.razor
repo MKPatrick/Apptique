@@ -1,0 +1,62 @@
+﻿@page "/NewRevision/{AppID}"
+@inject IAppService appService;
+@inject NavigationManager navigater;
+<h3>NewRevision</h3>
+<EditForm OnValidSubmit="Submit" Model="appRevision">
+
+    <MudTextField @bind-Value="appRevision.AppVersionName" Required=true Label="Version Name" Variant="Variant.Text"></MudTextField>
+    <MudNumericField @bind-Value="appRevision.AppVersion" Label="Version Nr" Variant="Variant.Text"></MudNumericField>
+    <br />
+    <MudFileUpload Style="display:inline" T="IBrowserFile" FilesChanged="UploadAPK" Context="cntxt">
+        <ButtonTemplate>
+            <MudFab HtmlTag="label"
+                    Color="Color.Success"
+                    Icon="@Icons.Material.Filled.FileOpen"
+                    Label="Select APK"
+                    for="@cntxt" />
+        </ButtonTemplate>
+    </MudFileUpload>
+    <br />
+    <br />
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Upload</MudButton>
+
+    </EditForm>
+
+@code {
+    private AppRevisionsModel appRevision = new AppRevisionsModel();
+    private AppModel app;
+    IBrowserFile apk;
+
+    [Parameter]
+    public string AppID { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        app = await appService.GetAppByID(Convert.ToInt32(AppID));
+    }
+
+
+
+    async Task Submit()
+    {
+        if (apk != null)
+        {
+            var apkName = await appService.CreateAPKPhysically(apk);
+            appRevision.ApkPath = apkName;
+            appRevision.ReleaseDate = DateTime.Now;
+            app.Revisions.Add(appRevision);
+            await appService.UpdateApp(app);
+            navigater.NavigateTo("");
+        }
+    }
+
+
+    private async Task UploadAPK(IBrowserFile file)
+    {
+        apk = file;
+    }
+
+}
+
+
+

@@ -1,7 +1,8 @@
 ﻿@page "/AppRevisions/{AppID}"
 @inject IAppService appService;
+@inject NavigationManager navigater;
 <h3>AppRevisions</h3>
-<MudButton Variant="Variant.Filled" Color="Color.Primary">Create New Release</MudButton>
+<MudButton @onclick="@(()=>navigater.NavigateTo("NewRevision/"+ app.ID))" Variant="Variant.Filled" Color="Color.Primary">Create New Release</MudButton>
 <MudDataGrid Items="app.Revisions">
     <Columns>
         <PropertyColumn Property="x => x.ID" Title="ID" />

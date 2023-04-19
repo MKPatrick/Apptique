@@ -5,6 +5,7 @@ namespace ApptiqueServer.Services
 {
     public interface IAppService
     {
+        Task UpdateApp(AppModel appModel);
         Task CreateNewApp(AppModel appModel);
         Task DeleteAppById(int id);
         Task<List<AppModel>> GetAllApps();

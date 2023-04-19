@@ -31,6 +31,11 @@ namespace ApptiqueServer.Services
             return fileName;
         }
 
+        public async Task UpdateApp(AppModel appModel)
+        {
+            
+        }
+
         public async Task CreateNewApp(AppModel appModel)
         {
             _apps.Add(appModel);
