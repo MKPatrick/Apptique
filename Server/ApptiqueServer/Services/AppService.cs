@@ -1,6 +1,12 @@
-﻿using ApptiqueServer.Models;
+﻿using ApptiqueServer.Config;
+using ApptiqueServer.Models;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
+using MongoDB.Driver;
+using System.Collections;
+using System.Xml.Linq;
 
 namespace ApptiqueServer.Services
 {
@@ -8,11 +14,19 @@ namespace ApptiqueServer.Services
     {
 
         private static List<AppModel> _apps = new List<AppModel>();
+        private string DbName = "MBAppTique";
+        public string CollectionName = "Apps";
         private readonly IWebHostEnvironment env;
+        private readonly IOptions<SecretModel> _options;
+        private readonly MongoClient _mongoClient;
 
-        public AppService(IWebHostEnvironment env)
+
+        public AppService(IWebHostEnvironment env, IOptions<SecretModel> options)
         {
             this.env = env;
+            this._options = options;
+            _mongoClient = new MongoClient(_options.Value.ConnectionString);
+  
         }
 
         public async Task RemoveAPKPhysically(string apkFile)
@@ -39,28 +53,45 @@ namespace ApptiqueServer.Services
 
         public async Task UpdateApp(AppModel appModel)
         {
-
+            var filter_id = Builders<AppModel>.Filter.Eq("ID", ObjectId.Parse(appModel.ID));
+            IMongoCollection<AppModel> collection = FetchCollection();
+            collection.ReplaceOne(filter_id, appModel);
         }
 
         public async Task CreateNewApp(AppModel appModel)
         {
-            _apps.Add(appModel);
+            IMongoCollection<AppModel> collection = FetchCollection();
+            await collection.InsertOneAsync(appModel);
+
         }
 
         public async Task<AppModel> GetAppByID(string id)
         {
-            return _apps.FirstOrDefault(x => x.ID == id);
+            var filter_id = Builders<AppModel>.Filter.Eq("ID", ObjectId.Parse(id));
+            IMongoCollection<AppModel> collection = FetchCollection();
+            return collection.Find(filter_id).FirstOrDefault();
         }
 
         public async Task<List<AppModel>> GetAllApps()
         {
-            return _apps;
+            IMongoCollection<AppModel> collection = FetchCollection();
+            return collection.Find(new BsonDocument()).ToList();
         }
+
+
 
         public async Task DeleteAppById(string id)
         {
             var app = await GetAppByID(id);
             _apps.Remove(app);
+        }
+
+
+        private IMongoCollection<AppModel> FetchCollection()
+        {
+            var database = _mongoClient.GetDatabase(DbName);
+            var collection = database.GetCollection<AppModel>(CollectionName);
+            return collection;
         }
 
 
