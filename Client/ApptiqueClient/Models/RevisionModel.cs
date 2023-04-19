@@ -1,17 +1,19 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ApptiqueServer.Models
+namespace ApptiqueClient.Models
 {
-    public class AppRevisionsModel
+    public class RevisionModel
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string ID { get; set; }
         public int AppVersion { get; set; }
-        public string ApkPath { get; set; }
+        public string APKPath { get; set; }
         public string AppVersionName { get; set; }
         public string ChangeSet { get; set; }
         public DateTime ReleaseDate { get; set; }
+
     }
 }

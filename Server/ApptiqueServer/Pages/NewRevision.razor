@@ -34,7 +34,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        app = await appService.GetAppByID(Convert.ToInt32(AppID));
+        app = await appService.GetAppByID(AppID);
         appRevision.AppVersion = app.CurrentReleaseVersion + 1;
     }
 

@@ -30,7 +30,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        app = await appService.GetAppByID(Convert.ToInt32(AppID));
+        app = await appService.GetAppByID(AppID);
         app.Revisions.Reverse();
     }
 

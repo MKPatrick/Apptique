@@ -1,5 +1,6 @@
 ﻿using ApptiqueServer.Models;
 using Microsoft.AspNetCore.Components.Forms;
+using MongoDB.Bson;
 
 namespace ApptiqueServer.Services
 {
@@ -46,7 +47,7 @@ namespace ApptiqueServer.Services
             _apps.Add(appModel);
         }
 
-        public async Task<AppModel> GetAppByID(int id)
+        public async Task<AppModel> GetAppByID(string id)
         {
             return _apps.FirstOrDefault(x => x.ID == id);
         }
@@ -56,7 +57,7 @@ namespace ApptiqueServer.Services
             return _apps;
         }
 
-        public async Task DeleteAppById(int id)
+        public async Task DeleteAppById(string id)
         {
             var app = await GetAppByID(id);
             _apps.Remove(app);

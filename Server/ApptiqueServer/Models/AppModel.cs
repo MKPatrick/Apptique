@@ -1,10 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace ApptiqueServer.Models
 {
     public class AppModel
     {
-        public int ID { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string ID { get; set; }
         [Required]
         public string AppName { get; set; }
         public string PackageName { get; set; }

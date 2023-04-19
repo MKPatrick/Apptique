@@ -1,0 +1,18 @@
+﻿@inject IPackageService packageService;
+@inject AppService appService;
+@page "/"
+
+@foreach (var item in packages)
+{
+    <p>@item.PackageName @item.VersionCode</p>
+}
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+@code {
+    List<PackageModel> packages=new();
+    protected override async Task OnInitializedAsync()
+    {
+        //   packages = packageService.GetAllPackages();
+        var result = await appService.GetAppInformationsFromServer();
+    }
+}
