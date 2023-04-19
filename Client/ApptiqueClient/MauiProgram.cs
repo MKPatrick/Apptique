@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using ApptiqueClient.Data;
-using ApptiqueClient.Platforms.Android;
+
 using ApptiqueClient.Services;
 
 namespace ApptiqueClient;
@@ -26,11 +25,10 @@ public static class MauiProgram
 #endif
 
 #if ANDROID
-        builder.Services.AddSingleton<IPackageService, PackageService>();
+        builder.Services.AddSingleton<IPackageService, ApptiqueClient.Platforms.Android.PackageService>();
 #endif
 
-        builder.Services.AddSingleton<WeatherForecastService>();
-
+ 
         return builder.Build();
     }
 }

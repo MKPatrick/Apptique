@@ -1,18 +1,17 @@
-﻿@inject IPackageService packageService;
+﻿
 @inject AppService appService;
 @page "/"
 
-@foreach (var item in packages)
+@foreach (var item in apps)
 {
-    <p>@item.PackageName @item.VersionCode</p>
+<ApptiqueClient.Components.AppComponent App=item /> 
 }
-<SurveyPrompt Title="How is Blazor working for you?" />
 
 @code {
-    List<PackageModel> packages=new();
+    List<AppModel> apps = new List<AppModel>();
     protected override async Task OnInitializedAsync()
     {
         //   packages = packageService.GetAllPackages();
-        var result = await appService.GetAppInformationsFromServer();
+      apps = await appService.GetAppInformationsFromServer();
     }
 }
