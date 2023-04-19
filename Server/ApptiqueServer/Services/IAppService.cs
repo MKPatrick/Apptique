@@ -1,4 +1,5 @@
 ﻿using ApptiqueServer.Models;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace ApptiqueServer.Services
 {
@@ -8,5 +9,6 @@ namespace ApptiqueServer.Services
         Task DeleteAppById(int id);
         Task<List<AppModel>> GetAllApps();
         Task<AppModel> GetAppByID(int id);
+        Task<string> CreateAPKPhysically(IBrowserFile apkFile);
     }
 }

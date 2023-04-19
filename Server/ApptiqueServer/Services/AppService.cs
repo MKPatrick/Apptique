@@ -1,15 +1,35 @@
 ﻿using ApptiqueServer.Models;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace ApptiqueServer.Services
 {
     public class AppService : IAppService
     {
 
-        private List<AppModel> _apps = new List<AppModel>();
+        private static List<AppModel> _apps = new List<AppModel>();
+        private readonly IWebHostEnvironment env;
 
-        public AppService() { }
+        public AppService(IWebHostEnvironment env)
+        {
+            this.env = env;
+        }
 
 
+        public async Task<string> CreateAPKPhysically(IBrowserFile apkFile)
+        {
+            string fileName = Guid.NewGuid().ToString();
+            Stream stream = apkFile.OpenReadStream(1024 * 100000);
+            if (!Directory.Exists($"{env.WebRootPath}\\Apps"))
+            {
+                Directory.CreateDirectory($"{env.WebRootPath}\\Apps");
+            }
+            var path = $"{env.WebRootPath}\\Apps\\{fileName}.apk";
+            FileStream fs = File.Create(path);
+            await stream.CopyToAsync(fs);
+            stream.Close();
+            fs.Close();
+            return fileName;
+        }
 
         public async Task CreateNewApp(AppModel appModel)
         {

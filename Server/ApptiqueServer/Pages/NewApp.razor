@@ -1,6 +1,86 @@
 ﻿@page "/NewApp"
+@inject NavigationManager navigater;
+@inject IAppService appservice;
 <h3>NewApp</h3>
+<EditForm OnValidSubmit="Submit" Model="appModel">
 
+    <MudTextField @bind-Value="appModel.AppName" Required=true Label="App Name" Variant="Variant.Text"></MudTextField>
+    <MudTextField @bind-Value="appModel.Description" Label="App Description" Variant="Variant.Text"></MudTextField>
+    <MudNumericField @bind-Value="appRevisionsModel.AppVersion" Label="App Version Nr" Variant="Variant.Text"></MudNumericField>
+    <MudTextField @bind-Value="appRevisionsModel.AppVersionName" Label="App Version Name" Variant="Variant.Text"></MudTextField>
+    <br />
+    @if (appModel.AppIcon != null && appModel.AppIcon != "")
+    {
+        <MudImage Width="50" Height="50" Src="@appModel.AppIcon" Alt="Mony the dog" Elevation="25" Class="rounded-lg" />
+
+    }
+    <MudFileUpload Style="display:inline" T="IBrowserFile" FilesChanged="UploadFiles" Context="cntxt">
+        <ButtonTemplate>
+            <MudFab HtmlTag="label"
+                    Color="Color.Primary"
+                    Icon="@Icons.Material.Filled.Image"
+                    Label="Select AppIcon"
+                    for="@cntxt" />
+        </ButtonTemplate>
+    </MudFileUpload>
+
+    <MudFileUpload Style="display:inline" T="IBrowserFile" FilesChanged="UploadAPK" Context="cntxt">
+        <ButtonTemplate>
+            <MudFab HtmlTag="label"
+                    Color="Color.Success"
+                    Icon="@Icons.Material.Filled.FileOpen"
+                    Label="Select APK"
+                    for="@cntxt" />
+        </ButtonTemplate>
+    </MudFileUpload>
+    @if (apk != null)
+    {
+        <p>@apk.Name</p>
+    }
+    <br />
+    <br />
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Upload</MudButton>
+</EditForm>
 @code {
+    IBrowserFile apk;
+    AppModel appModel = new AppModel();
+    AppRevisionsModel appRevisionsModel = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        appModel.Revisions.Add(appRevisionsModel);
+    }
+
+    async Task Submit()
+    {
+        if (apk != null)
+        {
+            var apkName = await appservice.CreateAPKPhysically(apk);
+            appRevisionsModel.ApkPath = apkName;
+            await appservice.CreateNewApp(appModel);
+            navigater.NavigateTo("");
+        }
+    }
+
+
+    private async Task UploadFiles(IBrowserFile file)
+    {
+        Stream stream = file.OpenReadStream(1024 * 10000);
+        byte[] bytes;
+        using (var memoryStream = new MemoryStream())
+        {
+            await stream.CopyToAsync(memoryStream);
+            bytes = memoryStream.ToArray();
+        }
+        string base64 = Convert.ToBase64String(bytes);
+        appModel.AppIcon = "data:image/png;base64," + base64;
+    }
+
+
+    private async Task UploadAPK(IBrowserFile file)
+    {
+        apk = file;
+    }
 
 }
+

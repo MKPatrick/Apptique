@@ -1,8 +1,11 @@
-﻿namespace ApptiqueServer.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ApptiqueServer.Models
 {
     public class AppModel
     {
         public int ID { get; set; }
+        [Required]
         public string AppName { get; set; }
         public string AppIcon { get; set; }
         public string Description { get; set; }
