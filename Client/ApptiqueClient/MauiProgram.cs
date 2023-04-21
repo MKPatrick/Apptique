@@ -26,9 +26,11 @@ public static class MauiProgram
 
 #if ANDROID
         builder.Services.AddSingleton<IPackageService, ApptiqueClient.Platforms.Android.PackageService>();
+        builder.Services.AddSingleton<IInstallerService, ApptiqueClient.Platforms.Android.InstallerService>();
+
 #endif
 
- 
+
         return builder.Build();
     }
 }

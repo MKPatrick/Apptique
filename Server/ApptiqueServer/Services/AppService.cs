@@ -38,7 +38,7 @@ namespace ApptiqueServer.Services
         public async Task<string> CreateAPKPhysically(IBrowserFile apkFile)
         {
             string fileName = Guid.NewGuid().ToString();
-            Stream stream = apkFile.OpenReadStream(1024 * 100000);
+            Stream stream = apkFile.OpenReadStream(1024 * 500000);
             if (!Directory.Exists($"{env.WebRootPath}\\Apps"))
             {
                 Directory.CreateDirectory($"{env.WebRootPath}\\Apps");
@@ -48,7 +48,7 @@ namespace ApptiqueServer.Services
             await stream.CopyToAsync(fs);
             stream.Close();
             fs.Close();
-            return $"Apps\\{fileName}.apk";
+            return $"Apps/{fileName}.apk";
         }
 
         public async Task UpdateApp(AppModel appModel)
@@ -82,8 +82,10 @@ namespace ApptiqueServer.Services
 
         public async Task DeleteAppById(string id)
         {
-            var app = await GetAppByID(id);
-            _apps.Remove(app);
+          
+            var filter_id = Builders<AppModel>.Filter.Eq("ID", ObjectId.Parse(id));
+            IMongoCollection<AppModel> collection = FetchCollection();
+            await collection.DeleteOneAsync(filter_id);
         }
 
 

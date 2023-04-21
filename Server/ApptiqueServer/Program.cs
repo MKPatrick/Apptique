@@ -1,5 +1,6 @@
 using ApptiqueServer.Config;
 using ApptiqueServer.Services;
+using Microsoft.AspNetCore.StaticFiles;
 using MudBlazor.Services;
 
 namespace ApptiqueServer
@@ -29,8 +30,26 @@ namespace ApptiqueServer
 
             app.UseHttpsRedirection();
 
-            app.UseStaticFiles();
+            //// Set up custom content types - associating file extension to MIME type
+            //var provider = new FileExtensionContentTypeProvider();
+            //// Add new mappings
+            //provider.Mappings[".apk"] = "application/x-msdownload";
+            //provider.Mappings[".htm3"] = "text/html";
+            //provider.Mappings[".image"] = "image/png";
 
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    ContentTypeProvider = provider
+            //});
+
+            app.UseStaticFiles();
+            var provider = new FileExtensionContentTypeProvider();
+            provider.Mappings[".apk"] = "application/vnd.android.package-archive";
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = provider
+            });
             app.UseRouting();
 
             app.MapBlazorHub();

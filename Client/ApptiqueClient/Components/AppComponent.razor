@@ -1,19 +1,42 @@
-﻿
+﻿@inject IInstallerService installer;
 <div class="card">
 
 <div class="container">
     <div class="row">
         <div class="col-3">
-                <img   src="@App.AppIcon" width="60" height="60" />
+                <img  class="mt-5" src="@App.App.AppIcon" width="60" height="60" />
         </div>
-        <div class="col-7">
-            <p><b>@App.AppName</b></p>
-             <p>@App.Description</p>
-              <p><u>@App.CurrentReleaseVersion</u></p>
+        <div class="col-9">
+                <span><b>Name</b><br />@App.App.AppName<br /></span>
+                <span><b>Description</b><br/> @App.App.Description</span>
+                <p><b>Version</b><u><br />@App.App.CurrentReleaseVersion</u></p>
         </div>
-           <div class="col-2">
-         <div class="btn btn-primary">INSTALL</div>
-        </div>
+           <div class="col-lg-12 w-100">
+                @if (App.CanBeInstalled)
+                {
+                    <div @onclick=UpdateInstall class="btn w-100 btn-block btn-primary">INSTALL</div>
+                }
+                else if(App.IsUpdateAvailable)
+                {
+                    <div @onclick=UpdateInstall class="btn w-100 btn-block btn-primary">Update</div>
+                }
+                else
+                {
+                    <div class="btn  w-100 btn-success disabled">Up To Date</div>
+                }
+
+                <br/>
+                <br />
+                @if (IsBusy)
+                {
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+
+                    </div>
+                    <br />
+                }
+            
+            </div>
         </div>
     </div>
 </div>
@@ -21,6 +44,20 @@
 @code {
 
     [Parameter]
-    public AppModel App { get; set; }
+    public AppsOverviewViewModel App { get; set; }
+    [Parameter]
+    public EventCallback<bool> AppStateChanged { get; set; }
 
+    private bool IsBusy = false;
+
+    async void UpdateInstall()
+    {
+        IsBusy = true;
+        var update = App.App.Revisions.OrderBy(x => x.AppVersion).Last();
+        await installer.InstallAndDownloadPackage(update, App.App.PackageName);
+        App.InstalledVersion = update.AppVersion;
+        IsBusy = false;
+        StateHasChanged();
+       await AppStateChanged.InvokeAsync(true);
+    }
 }

@@ -42,9 +42,17 @@
     <br />
     <br />
     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Upload</MudButton>
+   @if(submit)
+    {
+        <br/>
+        <br />
+        <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+
+    }
 </EditForm>
 @code {
     IBrowserFile apk;
+    bool submit = false;
     AppModel appModel = new AppModel();
     AppRevisionsModel appRevisionsModel = new();
 
@@ -57,6 +65,7 @@
     {
         if (apk != null)
         {
+            submit = true;
             var apkName = await appservice.CreateAPKPhysically(apk);
             appRevisionsModel.ApkPath = apkName;
             appRevisionsModel.ChangeSet = "INITAL RELEASE";

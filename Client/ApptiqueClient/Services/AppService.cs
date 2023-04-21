@@ -1,10 +1,5 @@
 ﻿using ApptiqueClient.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ApptiqueClient.Services
 {
@@ -19,7 +14,7 @@ namespace ApptiqueClient.Services
 
         public async Task<List<AppModel>> GetAppInformationsFromServer()
         {
-            var result = await _httpClient.GetFromJsonAsync<List<AppModel>>("");
+            var result = await _httpClient.GetFromJsonAsync<List<AppModel>>($"{Consts.ServerBaseURL}App/AllApps?secret={Consts.ServerSecret}");
             result.Reverse();
             return result;
         }

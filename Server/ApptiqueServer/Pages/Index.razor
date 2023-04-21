@@ -53,6 +53,7 @@
             }
 
             await appService.DeleteAppById(app.ID);
+            apps.Remove(app);
         }
     }
 }

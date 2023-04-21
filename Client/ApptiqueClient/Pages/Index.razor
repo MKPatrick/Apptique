@@ -1,17 +1,46 @@
-﻿
+﻿@inject IPackageService packageService;
 @inject AppService appService;
 @page "/"
 
+
 @foreach (var item in apps)
 {
-<ApptiqueClient.Components.AppComponent App=item /> 
+    <ApptiqueClient.Components.AppComponent App="item" AppStateChanged="AppStateChanged" />
+<br/>
 }
 
+
 @code {
-    List<AppModel> apps = new List<AppModel>();
+    List<AppsOverviewViewModel> apps = new List<AppsOverviewViewModel>();
+
     protected override async Task OnInitializedAsync()
     {
-        //   packages = packageService.GetAllPackages();
-      apps = await appService.GetAppInformationsFromServer();
+        if(await Permissions.CheckStatusAsync<Permissions.StorageWrite>() != PermissionStatus.Granted)
+        {
+            await Permissions.RequestAsync<Permissions.StorageWrite>();
+            await Permissions.RequestAsync<Permissions.StorageRead>();
+        }
+        await GetPackages();
+    }
+
+    async Task GetPackages()
+    {
+        apps.Clear();
+        var appsFromServer = await appService.GetAppInformationsFromServer();
+        appsFromServer.ForEach(x => apps.Add(new AppsOverviewViewModel() { App = x }));
+        var packages = packageService.GetAllPackages();
+        foreach (var item in packages)
+        {
+            var appMatch = apps.FirstOrDefault(x => x.App.PackageName == item.PackageName);
+            if (appMatch != null)
+            {
+                appMatch.InstalledVersion = item.VersionCode;
+            }
+        }
+    }
+
+    async Task AppStateChanged(bool b)
+    {
+       await GetPackages();
     }
 }

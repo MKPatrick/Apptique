@@ -10,12 +10,12 @@ namespace ApptiqueClient.Platforms.Android
         {
             List<PackageModel> packageModels = new List<PackageModel>();
             PackageManager packageManager = Platform.CurrentActivity.PackageManager;
-            var packages = packageManager.GetInstalledPackages(PackageInfoFlags.MatchUninstalledPackages);
-
-            foreach (PackageInfo package in packages)
+            var packages = packageManager.GetInstalledPackages(PackageInfoFlags.MetaData);
+            string s = "";
+            foreach (var package in packages)
             {
                 PackageModel packageM = new();
-
+                s += " " + package.PackageName;
                 packageM.PackageName = package.PackageName;
                 packageM.VersionCode = package.VersionCode;
                 packageModels.Add(packageM);
