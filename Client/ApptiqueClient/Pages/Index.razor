@@ -1,12 +1,12 @@
 ﻿@inject IPackageService packageService;
 @inject AppService appService;
 @page "/"
-
+@inject IStateChangedService changedService;
 
 @foreach (var item in apps)
 {
     <ApptiqueClient.Components.AppComponent App="item" AppStateChanged="AppStateChanged" />
-<br/>
+    <br />
 }
 
 
@@ -15,13 +15,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if(await Permissions.CheckStatusAsync<Permissions.StorageWrite>() != PermissionStatus.Granted)
+        changedService.UpdateUI += UpdateUI;
+        changedService.Register();
+
+        if (await Permissions.CheckStatusAsync<Permissions.StorageWrite>() != PermissionStatus.Granted)
         {
             await Permissions.RequestAsync<Permissions.StorageWrite>();
             await Permissions.RequestAsync<Permissions.StorageRead>();
         }
         await GetPackages();
     }
+
+
 
     async Task GetPackages()
     {
@@ -37,10 +42,24 @@
                 appMatch.InstalledVersion = item.VersionCode;
             }
         }
+        int t = apps.Count;
     }
 
     async Task AppStateChanged(bool b)
     {
-       await GetPackages();
+        await GetPackages();
     }
+
+    void UpdateUI(object sender, EventArgs eventArgs)
+    {
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            apps.Clear();
+            StateHasChanged();
+            await GetPackages();
+            StateHasChanged();
+        });
+    }
+
+
 }

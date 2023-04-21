@@ -14,7 +14,8 @@ namespace ApptiqueClient.Services
 
         public async Task<List<AppModel>> GetAppInformationsFromServer()
         {
-            var result = await _httpClient.GetFromJsonAsync<List<AppModel>>($"{Consts.ServerBaseURL}App/AllApps?secret={Consts.ServerSecret}");
+            string s = $"{Consts.ServerBaseURL}api/App/AllApps?secret={Consts.ServerSecret}";
+            var result = await _httpClient.GetFromJsonAsync<List<AppModel>>(s);
             result.Reverse();
             return result;
         }
