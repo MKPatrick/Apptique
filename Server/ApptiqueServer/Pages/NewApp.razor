@@ -69,6 +69,7 @@
             var apkName = await appservice.CreateAPKPhysically(apk);
             appRevisionsModel.ApkPath = apkName;
             appRevisionsModel.ChangeSet = "INITAL RELEASE";
+            appRevisionsModel.ID = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 24);
             appRevisionsModel.ReleaseDate = DateTime.Now;
             await appservice.CreateNewApp(appModel);
             navigater.NavigateTo("");

@@ -83,7 +83,7 @@ namespace ApptiqueServer.Services
         public async Task DeleteAppById(string id)
         {
           
-            var filter_id = Builders<AppModel>.Filter.Eq("ID", ObjectId.Parse(id));
+            var filter_id = Builders<AppModel>.Filter.Eq("ID",id);
             IMongoCollection<AppModel> collection = FetchCollection();
             await collection.DeleteOneAsync(filter_id);
         }
