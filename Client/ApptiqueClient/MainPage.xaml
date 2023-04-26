@@ -2,7 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:ApptiqueClient"
-             x:Class="ApptiqueClient.MainPage"
+             x:Class="ApptiqueClient.MainPage"  Loaded="MainPage_OnLoaded" Unloaded="MainPage_OnLoaded" 
+
+             
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
     <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
@@ -10,5 +12,9 @@
             <RootComponent Selector="#app" ComponentType="{x:Type local:Main}" />
         </BlazorWebView.RootComponents>
     </BlazorWebView>
+
+
+
+
 
 </ContentPage>

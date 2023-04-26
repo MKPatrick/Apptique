@@ -1,16 +1,27 @@
 ﻿@inject IPackageService packageService;
 @inject AppService appService;
 @page "/"
+@using Android.Content
+@using Android.OS
+@using Android.Runtime
+@using Android.App
+@using System.Timers
+@using ApptiqueClient.Platforms.Android
 @inject IStateChangedService changedService;
+
+
+
 
 @foreach (var item in apps)
 {
+    
     <ApptiqueClient.Components.AppComponent App="item" AppStateChanged="AppStateChanged" />
     <br />
 }
 
 
 @code {
+
     List<AppsOverviewViewModel> apps = new List<AppsOverviewViewModel>();
 
     protected override async Task OnInitializedAsync()
@@ -23,6 +34,8 @@
             await Permissions.RequestAsync<Permissions.StorageWrite>();
             await Permissions.RequestAsync<Permissions.StorageRead>();
         }
+
+        
         await GetPackages();
     }
 
@@ -60,6 +73,5 @@
             StateHasChanged();
         });
     }
-
 
 }

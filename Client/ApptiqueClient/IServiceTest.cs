@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace ApptiqueClient
 {
-    public class Consts
+    public interface IServiceTest
     {
-        public const string ServerBaseURL = "";
-        public const string ServerSecret = "";
-
+        void Start();
+        void Stop();
     }
 }
