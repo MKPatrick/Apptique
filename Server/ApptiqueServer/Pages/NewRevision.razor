@@ -18,15 +18,29 @@
                     for="@cntxt" />
         </ButtonTemplate>
     </MudFileUpload>
-    <br />
+
+    @if (apk != null)
+    {
+        <br />
+        <br />
+        <p>@apk.Name</p>
+    }
+ 
     <br />
     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Upload</MudButton>
+    @if (submit)
+    {
+        <br />
+        <br />
+        <MudProgressCircular Color="Color.Default" Indeterminate="true" />
 
+    }
     </EditForm>
 
 @code {
     private AppRevisionsModel appRevision = new AppRevisionsModel();
     private AppModel app;
+    private bool submit;
     IBrowserFile apk;
 
     [Parameter]
@@ -42,9 +56,11 @@
     {
         if (apk != null)
         {
+            submit = true;
             var apkName = await appService.CreateAPKPhysically(apk);
             appRevision.ApkPath = apkName;
             appRevision.ReleaseDate = DateTime.Now;
+            appRevision.ID = Guid.NewGuid().ToString().Replace("-","").Substring(0,24);
             app.Revisions.Add(appRevision);
             await appService.UpdateApp(app);
             navigater.NavigateTo("");
