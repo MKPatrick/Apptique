@@ -53,7 +53,9 @@ public class UpdateCheckService : Service, IServiceTest, IHostedService
 
     public override void OnCreate()
     {
-        timer = new Timer(10000);
+
+
+        timer = new Timer(TimeSpan.FromHours(2));
         timer.Elapsed += Timer_Elapsed;
 
         base.OnCreate();
