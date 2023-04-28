@@ -10,7 +10,7 @@ namespace ApptiqueClient.ViewModel
         {
             get
             {
-                return !(InstalledVersion == null) && InstalledVersion < App.CurrentReleaseVersion;
+                return (InstalledVersion != null) && InstalledVersion < App.CurrentReleaseVersion;
             }
 
         }

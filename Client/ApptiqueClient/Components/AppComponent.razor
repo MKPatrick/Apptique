@@ -1,44 +1,62 @@
 ﻿@inject IInstallerService installer;
+@using Radzen;
 <div class="card">
 
-<div class="container">
-    <div class="row">
-        <div class="col-3">
-                <img  class="mt-5" src="@App.App.AppIcon" width="60" height="60" />
-        </div>
-        <div class="col-9">
-                <span><b>Name</b><br />@App.App.AppName<br /></span>
-                <span><b>Description</b><br/> @App.App.Description</span>
-                <p><b>Version</b><u><br />@App.App.CurrentReleaseVersion</u></p>
-        </div>
-           <div class="col-lg-12 w-100">
-                @if (App.CanBeInstalled)
-                {
-                    <div @onclick=UpdateInstall class="btn w-100 btn-block btn-primary">INSTALL</div>
-                }
-                else if(App.IsUpdateAvailable)
-                {
-                    <div @onclick=UpdateInstall class="btn w-100 btn-block btn-primary">Update</div>
-                }
-                else
-                {
-                    <div class="btn  w-100 btn-success disabled">Up To Date</div>
-                }
-
-                <br/>
-                <br />
-                @if (IsBusy)
-                {
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
-
-                    </div>
-                    <br />
-                }
+    
+    <RadzenCard  Style="max-width: 420px">
+        <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
+            <RadzenImage Path="@App.App.AppIcon" Style="width: 100px; height: 100px; border-radius: 50%;" />
+            <RadzenStack Gap="0">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Name</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(App.App.AppName)</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">Description</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@App.App.Description</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">Version</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@App.App.CurrentReleaseVersion</b></RadzenText>
+            </RadzenStack>
+        </RadzenStack>
+        <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0">
             
-            </div>
-        </div>
-    </div>
+
+            @*<RadzenButton Variant="Variant.Text" class="rz-text-secondary-color" Text="Cancel"/>
+            <RadzenButton Variant="Variant.Text" Text="Send"/>*@
+
+            
+            @if (App.CanBeInstalled)
+            {
+                    
+                <MudButton Variant="MudBlazor.Variant.Filled" Class="btn w-100" Color="Color.Primary" Disabled="@IsBusy" OnClick="UpdateInstall">INSTALL</MudButton>
+                <br />
+            }
+            else if (App.IsUpdateAvailable)
+            {
+
+                <MudButton Variant="MudBlazor.Variant.Filled" Class="btn w-100" Disabled="@IsBusy" OnClick="UpdateInstall" Color="Color.Info">Update</MudButton>
+                <br />
+            }
+            else
+            {
+                <div class="btn  w-100 btn-success disabled">Up To Date</div>
+                  
+            }
+                
+
+
+            <br />
+
+        </RadzenStack>
+        
+        @if (IsBusy)
+        {
+              
+
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+
+        }
+
+    </RadzenCard>
+
+
 </div>
 
 @code {

@@ -1,12 +1,17 @@
 ﻿using System.Timers;
+using System.Windows.Input;
 using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Android.Views;
+using AndroidX.SwipeRefreshLayout.Widget;
 using ApptiqueClient.Platforms.Android;
 using ApptiqueClient.ViewModel;
+using ApptiqueClient.Components;
 using Microsoft.Extensions.Hosting;
 using Timer = System.Timers.Timer;
+
 
 namespace ApptiqueClient.Services;
 
@@ -54,7 +59,6 @@ public class UpdateCheckService : Service, IServiceTest, IHostedService
     public override void OnCreate()
     {
 
-
         timer = new Timer(TimeSpan.FromHours(2));
         timer.Elapsed += Timer_Elapsed;
 
@@ -90,7 +94,22 @@ public class UpdateCheckService : Service, IServiceTest, IHostedService
         IsUpdateAvailable();
 
 
-        if (UpdatePending) RegisterNotification();
+        if (UpdatePending)
+        {
+            RegisterNotification();
+        }
+    }
+
+
+    private void checkForUpdateManually()
+    {
+        IsUpdateAvailable();
+
+
+        if (UpdatePending)
+        {
+            RegisterNotification();
+        }
     }
 
     private async Task IsUpdateAvailable()
@@ -109,9 +128,14 @@ public class UpdateCheckService : Service, IServiceTest, IHostedService
 
 
                 if (appMatch.App.CurrentReleaseVersion > item.VersionCode)
+                {
                     UpdatePending = true;
+                }
                 else
+                {
                     UpdatePending = false;
+                }
+
             }
         }
     }
@@ -138,4 +162,19 @@ public class UpdateCheckService : Service, IServiceTest, IHostedService
 
         StartForeground(100, notification);
     }
+
+
+    public bool IsRefresh { get; set; }
+
+    public ICommand RefreshCommand => new Command(async () =>
+    {
+
+        IsRefresh = true;
+        await Task.Delay(2000);
+        checkForUpdateManually();
+        IsRefresh = false;
+
+    });
+
+
 }

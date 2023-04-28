@@ -1,6 +1,8 @@
 ﻿using ApptiqueClient.Platforms.Android;
 using ApptiqueClient.Services;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using MudBlazor.Services;
 
 namespace ApptiqueClient;
 
@@ -11,6 +13,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts => { fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"); });
 
 
@@ -19,6 +22,7 @@ public static class MauiProgram
         builder.Services.AddTransient<AppService>();
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddHostedService<UpdateCheckService>();
+        builder.Services.AddMudServices();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
@@ -32,6 +36,7 @@ public static class MauiProgram
 
         builder.Services.AddTransient<IServiceTest, UpdateCheckService>();
         builder.Services.AddHostedService<UpdateCheckService>();
+        builder.Services.AddMudServices();
 #endif
 
 

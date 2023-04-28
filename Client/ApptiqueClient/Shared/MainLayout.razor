@@ -13,3 +13,30 @@
         </article>
     </main>
 </div>
+
+
+<MudThemeProvider Theme="myTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+@code
+{
+
+
+    
+    private MudTheme myTheme = new()
+    {
+        Palette = new Palette
+        {
+            Primary = "#EA3C12",
+            Secondary = "#282B28",
+            Info = "#007FFF",
+            Success = "#2ECC40",
+            Warning = "#FF851B",
+            Error = "#F012BE",
+            AppbarBackground = "#85144b",
+    // more color properties
+        }
+    };
+    
+}

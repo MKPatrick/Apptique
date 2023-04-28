@@ -20,8 +20,8 @@
 		<ApplicationIdGuid>8D39F082-7870-4D8C-AD6C-D50C3EB1F531</ApplicationIdGuid>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
+		<ApplicationDisplayVersion>2.0</ApplicationDisplayVersion>
+		<ApplicationVersion>2</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
@@ -30,6 +30,15 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
+		<AndroidPackageFormat>apk</AndroidPackageFormat>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
+		<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+	</PropertyGroup>
+
 
 	<ItemGroup>
 		<!-- App Icon -->
@@ -50,24 +59,26 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\drawable\apptiquelogo.png" />
-	  <None Remove="Resources\Images\apptiquelogo.png" />
-	  <None Remove="Resources\Images\download.svg" />
+		<None Remove="Resources\drawable\apptiquelogo.png" />
+		<None Remove="Resources\Images\download.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="5.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+		<PackageReference Include="MudBlazor" Version="6.2.2" />
+		<PackageReference Include="Radzen.Blazor" Version="4.10.1" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
-	  <PackageReference Include="Xamarin.AndroidX.Core">
-	    <Version>1.9.0.1</Version>
-	  </PackageReference>
+		<PackageReference Include="Xamarin.AndroidX.Core">
+			<Version>1.9.0.1</Version>
+		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiImage Include="Resources\drawable\apptiquelogo.png" />
+		<MauiImage Include="Resources\drawable\apptiquelogo.png" />
 	</ItemGroup>
 
 </Project>

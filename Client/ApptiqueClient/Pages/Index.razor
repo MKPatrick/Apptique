@@ -1,33 +1,71 @@
 ﻿@inject IPackageService packageService;
 @inject AppService appService;
 @page "/"
-@using Android.Content
-@using Android.OS
-@using Android.Runtime
-@using Android.App
-@using System.Timers
-@using ApptiqueClient.Platforms.Android
+@using System.Windows.Input
 @inject IStateChangedService changedService;
+@inject ISnackbar Snackbar
 
 
 
-
-@foreach (var item in apps)
-{
+<RefreshView OnRefresh="@HandleRefresh">
     
-    <ApptiqueClient.Components.AppComponent App="item" AppStateChanged="AppStateChanged" />
-    <br />
-}
+    
+    <MudCard>
+        <MudCardContent>
+            <MudItem xs="12" sm="6" md="4">
+                <MudAutocomplete T="string" Label="Search" @bind-Value="value2" SearchFunc="@Search2"
+                                 ResetValueOnEmptyText="true"
+                                 CoerceText="@coerceText" CoerceValue="@coerceValue"
+                                 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary"/>
+            </MudItem>
+            <br />
+        </MudCardContent>
+    </MudCard>
+
+    <br/>
+    <br/>
+    <br/>
+
+    @{
+        var filteredApps = apps.Where(a => string.IsNullOrEmpty(value2) || a.App.AppName.Contains(value2, StringComparison.InvariantCultureIgnoreCase)).ToList();
+    }
+    <Virtualize Items="filteredApps" Context="item">
+        <ApptiqueClient.Components.AppComponent App="@item" AppStateChanged="AppStateChanged"/>
+        <br/>
+    </Virtualize>
+</RefreshView>
+
+<style>
+
+    body {
+        background-color: #3B403B;
+    }
+
+ 
+
+</style>
 
 
 @code {
 
-    List<AppsOverviewViewModel> apps = new List<AppsOverviewViewModel>();
+    readonly List<AppsOverviewViewModel> apps = new();
+    public string[] AppNameArray { get; set; }
+    
+
+    private bool resetValueOnEmptyText;
+    private bool coerceText;
+    private bool coerceValue;
+    private string value2;
+    private bool isRefreshing = false;
+
+
 
     protected override async Task OnInitializedAsync()
     {
         changedService.UpdateUI += UpdateUI;
         changedService.Register();
+
+        ;
 
         if (await Permissions.CheckStatusAsync<Permissions.StorageWrite>() != PermissionStatus.Granted)
         {
@@ -35,17 +73,45 @@
             await Permissions.RequestAsync<Permissions.StorageRead>();
         }
 
-        
+
         await GetPackages();
+
+        GetAppName();
+
     }
 
+    private async Task HandleRefresh()
+    {
+        isRefreshing = true;
+        // Do your data refreshing logic here...
+        await GetPackages();
+        Snackbar.Add("Page refreshed!");
+        
+        await Task.Delay(2000); // Simulate some work for 2 seconds
+        isRefreshing = false;
+    }
+
+
+
+
+    private async Task<IEnumerable<string>> Search2(string value)
+    {
+        await Task.Delay(5);
+
+        if (string.IsNullOrEmpty(value))
+        {
+            return Array.Empty<string>();
+        }
+
+        return AppNameArray.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
 
 
     async Task GetPackages()
     {
         apps.Clear();
         var appsFromServer = await appService.GetAppInformationsFromServer();
-        appsFromServer.ForEach(x => apps.Add(new AppsOverviewViewModel() { App = x }));
+        appsFromServer.ForEach(x => apps.Add(new AppsOverviewViewModel { App = x }));
         var packages = packageService.GetAllPackages();
         foreach (var item in packages)
         {
@@ -55,12 +121,25 @@
                 appMatch.InstalledVersion = item.VersionCode;
             }
         }
-        int t = apps.Count;
+        var t = apps.Count;
     }
 
     async Task AppStateChanged(bool b)
     {
         await GetPackages();
+    }
+
+    void GetAppName()
+    {
+
+        List<string> names = new List<string>();
+
+        foreach (var items in apps)
+        {
+            names.Add($"{items.App.AppName}");
+        }
+
+        AppNameArray = names.ToArray();
     }
 
     void UpdateUI(object sender, EventArgs eventArgs)
@@ -73,5 +152,7 @@
             StateHasChanged();
         });
     }
+
+    
 
 }
