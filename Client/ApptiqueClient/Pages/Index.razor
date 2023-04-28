@@ -1,15 +1,13 @@
 ﻿@inject IPackageService packageService;
 @inject AppService appService;
 @page "/"
-@using System.Windows.Input
 @inject IStateChangedService changedService;
 @inject ISnackbar Snackbar
 
 
-
 <RefreshView OnRefresh="@HandleRefresh">
-    
-    
+
+
     <MudCard>
         <MudCardContent>
             <MudItem xs="12" sm="6" md="4">
@@ -18,7 +16,7 @@
                                  CoerceText="@coerceText" CoerceValue="@coerceValue"
                                  AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary"/>
             </MudItem>
-            <br />
+            <br/>
         </MudCardContent>
     </MudCard>
 
@@ -37,9 +35,7 @@
 
 <style>
 
-    body {
-        background-color: #3B403B;
-    }
+    body { background-color: #3B403B; }
 
  
 
@@ -50,14 +46,13 @@
 
     readonly List<AppsOverviewViewModel> apps = new();
     public string[] AppNameArray { get; set; }
-    
+
 
     private bool resetValueOnEmptyText;
     private bool coerceText;
     private bool coerceValue;
     private string value2;
-    private bool isRefreshing = false;
-
+    private bool isRefreshing;
 
 
     protected override async Task OnInitializedAsync()
@@ -77,21 +72,16 @@
         await GetPackages();
 
         GetAppName();
-
     }
 
     private async Task HandleRefresh()
     {
         isRefreshing = true;
-        // Do your data refreshing logic here...
         await GetPackages();
         Snackbar.Add("Page refreshed!");
-        
-        await Task.Delay(2000); // Simulate some work for 2 seconds
+        await Task.Delay(2000);
         isRefreshing = false;
     }
-
-
 
 
     private async Task<IEnumerable<string>> Search2(string value)
@@ -131,8 +121,7 @@
 
     void GetAppName()
     {
-
-        List<string> names = new List<string>();
+        var names = new List<string>();
 
         foreach (var items in apps)
         {
@@ -153,6 +142,6 @@
         });
     }
 
-    
+
 
 }
