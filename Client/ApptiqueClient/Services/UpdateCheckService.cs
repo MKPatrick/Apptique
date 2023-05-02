@@ -19,10 +19,17 @@ namespace ApptiqueClient.Services;
 public class UpdateCheckService : Service, IServiceTest, IHostedService
 {
     private readonly List<AppsOverviewViewModel> apps = new();
-    private readonly AppService appService = new(new HttpClient());
+    private AppService appService;
     private readonly PackageService packageService = new();
     private Timer timer;
     private bool UpdatePending;
+
+
+    public UpdateCheckService()
+    {
+        var httpClient = new HttpClient();
+        appService = new AppService(httpClient);
+    }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
@@ -59,6 +66,9 @@ public class UpdateCheckService : Service, IServiceTest, IHostedService
     public override void OnCreate()
     {
 
+        var httpClient = new HttpClient();
+        httpClient.BaseAddress = new Uri(Consts.ServerBaseURL);
+        appService = new AppService(httpClient);
         timer = new Timer(TimeSpan.FromHours(2));
         timer.Elapsed += Timer_Elapsed;
 

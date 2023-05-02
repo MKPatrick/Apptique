@@ -15,16 +15,15 @@
 </div>
 
 
-<MudThemeProvider Theme="myTheme" />
-<MudDialogProvider />
-<MudSnackbarProvider />
+<MudThemeProvider Theme="myTheme"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
 
 @code
 {
 
 
-    
-    private MudTheme myTheme = new()
+    private readonly MudTheme myTheme = new()
     {
         Palette = new Palette
         {
@@ -34,9 +33,9 @@
             Success = "#2ECC40",
             Warning = "#FF851B",
             Error = "#F012BE",
-            AppbarBackground = "#85144b",
+            AppbarBackground = "#85144b"
     // more color properties
         }
     };
-    
+
 }

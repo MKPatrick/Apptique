@@ -23,6 +23,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddHostedService<UpdateCheckService>();
         builder.Services.AddMudServices();
+        builder.Services.AddHttpClient();
+
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
@@ -37,6 +39,7 @@ public static class MauiProgram
         builder.Services.AddTransient<IServiceTest, UpdateCheckService>();
         builder.Services.AddHostedService<UpdateCheckService>();
         builder.Services.AddMudServices();
+        builder.Services.AddHttpClient();
 #endif
 
 
