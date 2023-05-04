@@ -1,60 +1,152 @@
 ﻿@page "/NewApp"
 @inject NavigationManager navigater;
 @inject IAppService appservice;
-<h3>NewApp</h3>
+
 <EditForm OnValidSubmit="Submit" Model="appModel">
+    
+    <div style="display: flex; flex-direction: row; margin-left: 9%">
+        
+        <div style="z-index: 1">
+        
+            @*<MudTextField @bind-Value="appModel.AppName" Required=true Label="App Name" Variant="Variant.Text" Style="width: 350px; color: var(--theme-color)"></MudTextField>
+            <MudTextField @bind-Value="appModel.PackageName" Required=true Label="Package Name com.example.myapp" Variant="Variant.Text"></MudTextField>
 
-    <MudTextField @bind-Value="appModel.AppName" Required=true Label="App Name" Variant="Variant.Text"></MudTextField>
-    <MudTextField @bind-Value="appModel.PackageName" Required=true Label="Package Name com.example.myapp" Variant="Variant.Text"></MudTextField>
+            <MudTextField @bind-Value="appModel.Description" Label="App Description" Variant="Variant.Text"></MudTextField>
+            <MudNumericField @bind-Value="appRevisionsModel.AppVersion" Label="App Version Nr" Variant="Variant.Text"></MudNumericField>
+            <MudTextField @bind-Value="appRevisionsModel.AppVersionName" Label="App Version Name" Variant="Variant.Text"></MudTextField>*@
+    
+            <form>
+    
+                <div class="group">      
+                    <input id="appName" type="text" required @bind-value="@appModel.AppName">
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label class="frm-label" for="appName">App Name</label>
+                </div>
+      
+                <div class="group">      
+                    <input id="packageName" type="text" required @bind-value="@appModel.PackageName">
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label class="frm-label" for="packageName">Package Name</label>
+                </div>
+                
+                <div class="group">      
+                    <input id="description" type="text" required @bind-value="@appModel.Description">
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label class="frm-label" for="description">App Description</label>
+                </div>
+                
+                <div class="group">
+                    <input id="addVersion" type="text" required @bind-value="@appRevisionsModel.AppVersion">
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label class="frm-label" for="addVersion">App Version Nr</label>
+                </div>
+                
+                <div class="group">
+                    <input id="appVersionName" type="text" required @bind-value="@appRevisionsModel.AppVersionName">
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label class="frm-label" for="appVersionName">App Version Name</label>
+                </div>
+            </form>
+        
 
-    <MudTextField @bind-Value="appModel.Description" Label="App Description" Variant="Variant.Text"></MudTextField>
-    <MudNumericField @bind-Value="appRevisionsModel.AppVersion" Label="App Version Nr" Variant="Variant.Text"></MudNumericField>
-    <MudTextField @bind-Value="appRevisionsModel.AppVersionName" Label="App Version Name" Variant="Variant.Text"></MudTextField>
-    <br />
-    @if (appModel.AppIcon != null && appModel.AppIcon != "")
-    {
-        <MudImage Width="50" Height="50" Src="@appModel.AppIcon" Alt="Mony the dog" Elevation="25" Class="rounded-lg" />
+            
+            
+            <MudFileUpload Style="display:inline" T="IBrowserFile" FilesChanged="UploadAPK" Context="cntxt">
+                <ButtonTemplate>
+                    <MudButton HtmlTag="label"
+                               Variant="Variant.Filled"
+                               Color="Color.Info"
+                               StartIcon="@Icons.Material.Filled.Image"
+                               for="@cntxt">
+                        Select APK
+                    </MudButton>
+                </ButtonTemplate>
+            </MudFileUpload>
+            
+            
+            
+            
 
-    }
-    <MudFileUpload Style="display:inline" T="IBrowserFile" FilesChanged="UploadFiles" Context="cntxt">
-        <ButtonTemplate>
-            <MudFab HtmlTag="label"
-                    Color="Color.Primary"
-                    Icon="@Icons.Material.Filled.Image"
-                    Label="Select AppIcon"
-                    for="@cntxt" />
-        </ButtonTemplate>
-    </MudFileUpload>
+        </div>
 
-    <MudFileUpload Style="display:inline" T="IBrowserFile" FilesChanged="UploadAPK" Context="cntxt">
-        <ButtonTemplate>
-            <MudFab HtmlTag="label"
-                    Color="Color.Success"
-                    Icon="@Icons.Material.Filled.FileOpen"
-                    Label="Select APK"
-                    for="@cntxt" />
-        </ButtonTemplate>
-    </MudFileUpload>
+        <div style="margin-left: 25%; ; margin-top: 10%; z-index: 2">
+        
+            @if (appModel.AppIcon != null && appModel.AppIcon != "")
+            {
+                <MudImage Width="180" Height="180" Src="@appModel.AppIcon" Alt="Mony the dog" Elevation="25" Class="rounded-lg" />
+
+            }
+            else
+            {
+                <MudImage Width="180" Height="180" Src="no-image.jpg" Alt="Mony the dog" Elevation="25" Class="rounded-lg" />
+            }
+            
+            <br />
+            <br />
+            <br />
+            <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles" Context="cnt">
+                <ButtonTemplate>
+                    <MudButton HtmlTag="label"
+                               Variant="Variant.Filled"
+                               Color="Color.Info"
+                               StartIcon="@Icons.Material.Filled.Image"
+                               for="@cnt">
+                        Select App Icon
+                    </MudButton>
+                </ButtonTemplate>
+            </MudFileUpload>
+            
+            
+            <div style="margin-left: 18%; margin-top: 40%">
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Upload App</MudButton>
+            </div>
+
+
+        </div>
+
+    </div>
+    
+    
+    
     @if (apk != null)
     {
-        <p>@apk.Name</p>
+        <p style="margin-left: 9%;">@apk.Name</p>
     }
-    <br />
-    <br />
-    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Upload</MudButton>
-   @if(submit)
-    {
-        <br/>
-        <br />
-        <MudProgressCircular Color="Color.Default" Indeterminate="true" />
-
-    }
+    
+    
+    
 </EditForm>
+
+
+
+@if(submit)
+{
+   
+    errMessage = string.Empty;
+    <MudProgressLinear Color="Color.Success" Indeterminate="true" Class="my-7"/>
+  
+      
+}
+
+    <p style="color: red">@errMessage</p>
+
+
+
+
 @code {
     IBrowserFile apk;
     bool submit = false;
     AppModel appModel = new AppModel();
     AppRevisionsModel appRevisionsModel = new();
+
+    private bool checkValue;
+    private string errMessage;
+   
 
     protected override async Task OnInitializedAsync()
     {
@@ -72,8 +164,20 @@
             appRevisionsModel.ID = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 24);
             appRevisionsModel.ReleaseDate = DateTime.Now;
             await appservice.CreateNewApp(appModel);
-            navigater.NavigateTo("");
+            navigater.NavigateTo("/1", true);
+            navigater.NavigateTo("/", true);
+            
         }
+
+        @if (string.IsNullOrWhiteSpace(appModel.AppName) || string.IsNullOrWhiteSpace(appModel.PackageName) || string.IsNullOrWhiteSpace(appModel.Description) || string.IsNullOrWhiteSpace(appRevisionsModel.AppVersion.ToString()) || string.IsNullOrWhiteSpace(appRevisionsModel.AppVersionName))
+        {
+            errMessage = "Please fill out al fields as well as upload an APK file and an APP icon";
+        }
+        else
+        {
+            errMessage = string.Empty;
+        }
+
     }
 
 

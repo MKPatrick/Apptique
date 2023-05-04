@@ -1,47 +1,108 @@
 ﻿@page "/NewRevision/{AppID}"
 @inject IAppService appService;
 @inject NavigationManager navigater;
-<h3>NewRevision</h3>
+
+
 <EditForm OnValidSubmit="Submit" Model="appRevision">
 
-    <MudTextField @bind-Value="appRevision.AppVersionName" Required=true Label="Version Name" Variant="Variant.Text"></MudTextField>
+    @* <MudTextField @bind-Value="appRevision.AppVersionName" Required=true Label="Version Name" Variant="Variant.Text"></MudTextField>
     <MudNumericField Min="app.CurrentReleaseVersion+1" @bind-Value="appRevision.AppVersion" Label="Version Nr" Variant="Variant.Text"></MudNumericField>
-    <MudTextField @bind-Value="appRevision.ChangeSet" Required=true Label="Changeset" Variant="Variant.Text"></MudTextField>
+    <MudTextField @bind-Value="appRevision.ChangeSet" Required=true Label="Changeset" Variant="Variant.Text"></MudTextField>*@
+    
+    <div style="margin-left: 34%; margin-top: 5%">
 
-    <br />
-    <MudFileUpload Style="display:inline" T="IBrowserFile" FilesChanged="UploadAPK" Context="cntxt">
-        <ButtonTemplate>
-            <MudFab HtmlTag="label"
-                    Color="Color.Success"
-                    Icon="@Icons.Material.Filled.FileOpen"
-                    Label="Select APK"
-                    for="@cntxt" />
-        </ButtonTemplate>
-    </MudFileUpload>
+    
 
-    @if (apk != null)
-    {
+        <form>
+        
+            <div class="group">      
+                <input id="appName" type="text" required @bind-value="@appRevision.AppVersionName">
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label class="frm-label" for="appName">Version Name</label>
+            </div>
+          
+            <div class="group">      
+                <input id="packageName" type="number" min="@app.CurrentReleaseVersion+1" required @bind-value="@appRevision.AppVersion">
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label class="frm-label" for="packageName">Version Nr</label>
+            </div>
+                    
+            <div class="group">      
+                <input id="description" type="text" required @bind-value="@appRevision.ChangeSet">
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label class="frm-label" for="description">Change set</label>
+            </div>
+
+        </form>
+
         <br />
-        <br />
-        <p>@apk.Name</p>
-    }
+        
+        <div style="margin-left: 12%">
+
+        
+
+            <MudFileUpload Style="display:inline" T="IBrowserFile" FilesChanged="UploadAPK" Context="cntxt">
+                <ButtonTemplate>
+                    <MudButton HtmlTag="label"
+                               Variant="Variant.Filled"
+                               Color="Color.Info"
+                               StartIcon="@Icons.Material.Filled.Image"
+                               for="@cntxt">
+                        Select APK
+                    </MudButton>
+                </ButtonTemplate>
+            </MudFileUpload>
+            
+        </div>
+
+    </div>
+    
+    <div style="margin-left:30%">
+        
+        @if (apk != null)
+        {
+           
+            <p>@apk.Name</p>
+        }
+
+    </div>
+
+
+    
  
     <br />
-    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Upload</MudButton>
-    @if (submit)
-    {
-        <br />
-        <br />
-        <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+    <br />
+    
+    <div style="margin-left: 36%">
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Create and Publish Revision</MudButton>
+    </div>
+    
+    
+</EditForm>
 
-    }
-    </EditForm>
+
+
+@if(submit)
+{
+   
+    errMessage = string.Empty;
+    <MudProgressLinear Color="Color.Success" Indeterminate="true" Class="my-7" />
+  
+      
+}
+
+<p style="color: red">@errMessage</p>
+
 
 @code {
     private AppRevisionsModel appRevision = new AppRevisionsModel();
     private AppModel app;
     private bool submit;
     IBrowserFile apk;
+    private string errMessage;
 
     [Parameter]
     public string AppID { get; set; }
@@ -63,8 +124,22 @@
             appRevision.ID = Guid.NewGuid().ToString().Replace("-","").Substring(0,24);
             app.Revisions.Add(appRevision);
             await appService.UpdateApp(app);
-            navigater.NavigateTo("");
+            navigater.NavigateTo("/1", true);
+            navigater.NavigateTo($"/AppRevisions/{AppID}", true);
         }
+
+
+        @if (string.IsNullOrWhiteSpace(appRevision.AppVersionName) || string.IsNullOrWhiteSpace(appRevision.AppVersion.ToString()) || string.IsNullOrWhiteSpace(appRevision.ChangeSet))
+        {
+            errMessage = "Please fill out al fields as well as upload an APK file";
+        }
+        else
+        {
+            errMessage = string.Empty;
+        }
+
+
+
     }
 
     private async Task UploadAPK(IBrowserFile file)

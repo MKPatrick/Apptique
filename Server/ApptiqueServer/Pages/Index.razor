@@ -4,47 +4,239 @@
 @inject NavigationManager navigate;
 <h1>App Overview</h1>
 
-<MudDataGrid Items="apps">
-    <Columns>
-        <PropertyColumn Property="x => x.PackageName" Title="App Package Name" />
-        <TemplateColumn>
-            <CellTemplate>
-                <MudImage Width="50" Height="50" Src="@context.Item.AppIcon" Alt="Mony the dog" Elevation="25" Class="rounded-lg" />
-            </CellTemplate>
-        </TemplateColumn>
-        <PropertyColumn Property="x => x.AppName" />
 
 
-        <PropertyColumn Property="x => x.CurrentReleaseVersion" />
-        <PropertyColumn Property="x => x.LastReleaseDate" Title="Release Date" />
-        <TemplateColumn StickyRight="true">
-            <CellTemplate>
-                <MudIconButton Icon="@Icons.Material.Outlined.Update" OnClick="@(()=>NavigateToRevisions(context.Item))" Size="@Size.Small" />
 
-                <MudIconButton Icon="@Icons.Material.Outlined.Delete" OnClick="@(()=>Delete(context.Item))" Size="@Size.Small" />
+<head>
+    <title>Apptique</title>
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"/>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
 
-            </CellTemplate>
-        </TemplateColumn>
-    </Columns>
-</MudDataGrid>
+<body>
+
+<div class="video-bg">
+    <video width="320" height="240" autoplay loop muted>
+        <source
+            src="https://assets.codepen.io/3364143/7btrrd.mp4"
+            type="video/mp4"/>
+        Your browser does not support the video tag.
+    </video>
+</div>
+<div class="dark-light">
+    <svg
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1.5"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+    </svg>
+</div>
+<div class="app">
+    <div class="header">
+
+
+        <div class="side-menu" style="color: #ff6200; display: flex; flex-direction: row">
+
+            <div>
+                <img src="apptique-website-favicon-color (1).svg" style="width: 40px; height: 40px;" />
+            </div>
+
+
+
+            <div style="margin-top: 9px">
+                &nbsp Apptique Server
+            </div>
+
+        </div>
+
+
+
+    </div>
+    <div class="wrapper">
+        <div class="left-side">
+
+            <div class="side-wrapper">
+
+                <div class="side-title">Overview</div>
+
+                <div class="side-menu">
+
+                    <a href="/" @onclick="displayAllApps">
+
+                        <svg viewBox="0 0 512 512">
+                            <g xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                                <path
+                                    d="M0 0h128v128H0zm0 0M192 0h128v128H192zm0 0M384 0h128v128H384zm0 0M0 192h128v128H0zm0 0"
+                                    data-original="#bfc9d1"/>
+                            </g>
+                            <path
+                                xmlns="http://www.w3.org/2000/svg"
+                                d="M192 192h128v128H192zm0 0"
+                                fill="currentColor"
+                                data-original="#82b1ff"/>
+                            <path
+                                xmlns="http://www.w3.org/2000/svg"
+                                d="M384 192h128v128H384zm0 0M0 384h128v128H0zm0 0M192 384h128v128H192zm0 0M384 384h128v128H384zm0 0"
+                                fill="currentColor"
+                                data-original="#bfc9d1"/>
+                        </svg>
+                        
+                        All Published Apps
+                    </a>
+
+
+
+                </div>
+            </div>
+
+            <div class="side-wrapper">
+
+                <div class="side-title">Settings</div>
+
+                <div class="side-menu">
+
+                    <a href="/" @onclick="displaySettings">
+                        <svg viewBox="0 0 512 512" fill="currentColor">
+                            <path d="M0 331v112.295a14.996 14.996 0 007.559 13.023L106 512V391L0 331zM136 391v121l105-60V331zM271 331v121l105 60V391zM406 391v121l98.441-55.682A14.995 14.995 0 00512 443.296V331l-106 60zM391 241l-115.754 57.876L391 365.026l116.754-66.15zM262.709 1.583a15.006 15.006 0 00-13.418 0L140.246 57.876 256 124.026l115.754-66.151L262.709 1.583zM136 90v124.955l105 52.5V150zM121 241L4.246 298.876 121 365.026l115.754-66.15zM271 150v117.455l105-52.5V90z" />
+                        </svg>
+                        Server Configuration
+                    </a>
+                   
+
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="main-container">
+            <div class="main-header">
+                
+                <div class="header-menu" style="padding-left: 18%"> 
+                    <a class="main-header-link is-active" href="/" @onclick="displayAllApps">All Apps</a>
+                    <a class="main-header-link" href="/" @onclick="displayAddNewApp">Release New App</a>
+                </div>
+            </div>
+            <div class="content-wrapper">
+
+                <div class="content-section">
+                    
+                        
+                    @if (showAllApps)
+                    {
+                        <div style="display: flex; flex-direction: row">
+                            <div class="content-section-title" style="margin-left: 8%;">Name</div>
+                            <div class="content-section-title" style="margin-left: 17%;">Description</div>
+                        </div>
+                            
+                            
+
+                        <ul>
+
+                            @foreach (var item in apps)
+                            {
+                                <li class="adobe-product">
+
+                                    <div class="products">
+
+                                        <img src="@item.AppIcon" style="width: 40px; width: 40px; border-radius: 5px;"/>
+
+                                        &nbsp &nbsp @item.AppName
+
+
+                                    </div>
+                                    <span class="status" style="padding-left: 12%; margin-right: 25%">
+                                        @item.Description
+                                    </span>
+
+                                    <div class="button-wrapper">
+                                        Version: @item.CurrentReleaseVersion
+                                    </div>
+
+                                    <div class="button-wrapper">
+
+                                        <MudIconButton Icon="@Icons.Material.Filled.Update" Color="Color.Info" OnClick="@(()=>NavigateToRevisions(item))" Size="@Size.Small" />
+                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(()=>Delete(item))" Size="@Size.Small" />
+
+                                    </div>
+                                </li>
+                            }
+                        
+                        </ul>
+                    }
+                        
+                    @if (showAddNewApp)
+                    {
+                            
+                               
+                        <NewApp/>  
+                                
+                            
+
+                    }
+                        
+                    @if (showSettings)
+                    {
+                        <Settings/>
+                    }
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay-app"></div>
+    
+
+</div>
+</body>
+
+<style>
+
+
+    body {
+        background-color: black;
+    }
+
+</style>
+
 
 @code {
     private List<AppModel> apps;
+    private bool showAllApps = true;
+    private bool showAddNewApp = false;
+    private bool showSettings = false;
+    private bool showAppRevisions = false;
+
 
     protected override async Task OnInitializedAsync()
     {
-
         apps = await appService.GetAllApps();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JsRuntime.InvokeVoidAsync("import", "/script.js");
+        }
     }
 
     void NavigateToRevisions(AppModel app)
     {
-        navigate.NavigateTo($"AppRevisions/{app.ID}");
+        navigate.NavigateTo($"AppRevisions/{app.ID}", true);
     }
 
     async Task Delete(AppModel app)
     {
-        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+        var confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
         if (confirmed)
         {
             foreach (var rev in app.Revisions)
@@ -56,4 +248,29 @@
             apps.Remove(app);
         }
     }
+
+    private void displayAllApps()
+    {
+        showAllApps = true;
+        showAddNewApp = false;
+        showSettings = false;
+    }
+
+    private void displayAddNewApp()
+    {
+        showAllApps = false;
+        showAddNewApp = true;
+        showSettings = false;
+    }
+
+    private void displaySettings()
+    {
+        showAllApps = false;
+        showAddNewApp = false;
+        showSettings = true;
+
+    }
+
+
+
 }
