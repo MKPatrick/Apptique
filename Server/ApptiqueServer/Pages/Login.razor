@@ -1,0 +1,218 @@
+﻿@page "/login"
+
+
+@inject IJSRuntime JsRuntime;
+
+
+@inject HttpClient http
+@inject AuthenticationStateProvider AuthStatProvider
+
+@inject ISessionStorageService SessionStorage
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@using System.ComponentModel.DataAnnotations
+@using Blazored.SessionStorage
+@using MongoDB.Bson
+@inject IConfiguration Configuration
+@inject UserService userServices
+
+
+<h1>App Overview</h1>
+
+
+
+
+<head>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
+    <link rel="stylesheet" href="/css/login.css" />
+</head>
+
+<body>
+
+    <div class="video-bg">
+        <video width="320" height="240" autoplay loop muted>
+            <source src="https://assets.codepen.io/3364143/7btrrd.mp4"
+                    type="video/mp4" />
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div class="dark-light">
+        <svg viewBox="0 0 24 24"
+             stroke="currentColor"
+             stroke-width="1.5"
+             fill="none"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+        </svg>
+    </div>
+    <div class="app">
+        <div class="header">
+
+
+            <div class="side-menu" style="color: #ff6200; display: flex; flex-direction: row; margin-left: 21%">
+
+                <div>
+                    <img src="apptique-website-favicon-color (1).svg" style="width: 40px; height: 40px;" />
+                </div>
+
+
+
+                <div style="margin-top: 9px">
+                    &nbsp Apptique Server
+                </div>
+
+            </div>
+
+            
+
+        </div>
+        
+        <EditForm OnValidSubmit="Submit" Model="user">
+            
+            <div style="margin-left: 23%; z-index: 0">
+                <br />
+                <p style="color: red">@errorMessage</p>
+            </div>
+
+            <div style="margin-top: 15%; margin-left: 12%">
+
+
+                <form>
+
+                    <div class="group">
+                        <input id="appName" type="text" required @bind-value="@user.Username">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label class="frm-label" for="appName">Username</label>
+                    </div>
+
+                    <div class="group">
+                        <input id="packageName" type="password" required @bind-value="@user.Password">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label class="frm-label" for="packageName">Password</label>
+                    </div>
+
+                </form>
+
+
+
+            </div>
+
+            <div style="margin-left: 38%; margin-top: 15%">
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Login</MudButton>
+            </div>
+
+            @if (success == true)
+            {
+                <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"/>
+            }
+
+
+            <div class="overlay-app"></div>
+
+        </EditForm>
+        
+        
+        
+
+    </div>
+
+
+
+</body>
+
+<style>
+
+
+    body {
+        background-color: black;
+    }
+
+</style>
+
+
+@code {
+
+    UserModel user = new UserModel();
+    private string errorMessage { get; set; }
+    bool success;
+
+    protected override async Task OnInitializedAsync()
+    {
+        CreateUserOnNewDatabase();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JsRuntime.InvokeVoidAsync("import", "/script.js");
+        }
+    }
+
+    async Task Submit()
+    {
+
+        if (!string.IsNullOrWhiteSpace(user.Username) || !string.IsNullOrWhiteSpace(user.Password))
+        {
+            success = true;
+
+            string url = "https://localhost:62401/api/app/login";
+
+
+
+            var result = await http.PostAsJsonAsync(url, user);
+
+
+            if (result.IsSuccessStatusCode)
+            {
+                var token = await result.Content.ReadAsStringAsync();
+                await SessionStorage.SetItemAsync("authToken", token);
+
+                await AuthStatProvider.GetAuthenticationStateAsync();
+                Navigation.NavigateTo("/", true);
+            }
+            else
+            {
+                var error = await result.Content.ReadFromJsonAsync<ErrorResponse>();
+                errorMessage = error.Message;
+                success = false;
+            }
+        }
+        else
+        {
+            errorMessage = "ERROR: Please fill in all fields!";
+        }
+
+        
+    }
+
+    class ErrorResponse
+    {
+        public string Message { get; set; }
+    }
+
+
+    private void CreateUserOnNewDatabase()
+    {
+        
+
+        if (userServices.CreateAdminOnNewDatabase().Count == 0)
+        {
+            http.PostAsJsonAsync("https://localhost:62401/api/app/create", user);
+        }
+
+        
+    }
+
+}
+
+   
+    
+
+
+
+

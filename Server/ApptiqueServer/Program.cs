@@ -1,5 +1,7 @@
 using ApptiqueServer.Config;
 using ApptiqueServer.Services;
+using Blazored.SessionStorage;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.StaticFiles;
 using MudBlazor.Services;
 
@@ -17,7 +19,16 @@ namespace ApptiqueServer
             builder.Services.AddTransient<IAppService, AppService>();
             builder.Services.AddMudServices();
             builder.Services.Configure<SecretModel>(
-    builder.Configuration.GetSection("Secret"));
+            builder.Configuration.GetSection("Secret"));
+
+            builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddSingleton<UserService>();
+            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddHttpClient();
+            builder.Services.AddBlazoredSessionStorage();
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -28,7 +39,7 @@ namespace ApptiqueServer
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             //// Set up custom content types - associating file extension to MIME type
             //var provider = new FileExtensionContentTypeProvider();
@@ -41,6 +52,10 @@ namespace ApptiqueServer
             //{
             //    ContentTypeProvider = provider
             //});
+
+            app.MapControllers();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseStaticFiles();
             var provider = new FileExtensionContentTypeProvider();
@@ -56,7 +71,7 @@ namespace ApptiqueServer
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
- 
+
                 endpoints.MapFallbackToPage("/_Host");
             });
             app.Run();

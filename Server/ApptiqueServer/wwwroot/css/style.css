@@ -543,7 +543,7 @@ body.light-mode .video-bg:before {
 }
 
 .content-button {
-    background-color: #3a6df0;
+    background-color: red;
     border: none;
     padding: 8px 26px;
     color: #fff;

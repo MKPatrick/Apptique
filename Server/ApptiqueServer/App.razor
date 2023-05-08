@@ -1,14 +1,108 @@
-﻿
-<Router AppAssembly="@typeof(App).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-    </Found>
-    <NotFound>
-        <PageTitle>Not found</PageTitle>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
-        </LayoutView>
-    </NotFound>
-</Router>
+﻿@inject NavigationManager Navigation
+<CascadingAuthenticationState>
+    
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+			
+                <NotAuthorized>
+					
+                    @{
+                        Navigation.NavigateTo("/login", true);
+                    }
+
+                </NotAuthorized>
+			
+
+            </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <section class="page_404">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12 ">
+                                <div class="col-sm-10 col-sm-offset-1  text-center">
+
+                                    <div class="four_zero_four_bg">
+                                    </div>
+
+                                    <br />
+                                    <br />
+
+                                    <div class="contant_box_404">
+
+                                        <h3 class="h2">
+                                            Oops! Look like you're lost
+                                        </h3>
+
+                                        <p>the page you are looking for is cannot be found or is not available!</p>
+
+                                        <br />
+
+                                        <MudButton Variant="Variant.Filled" OnClick="() => GoHome()" Style="background-color: #ff4500; color: white; margin-left: 10%; margin-right: 10%">Go back home</MudButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </LayoutView>
+        </NotFound>
+    </Router>
+
+</CascadingAuthenticationState>
+
+
+@code
+{
+    public void GoHome()
+    {
+        Navigation.NavigateTo("/", true);
+    }
+}
+
+
+<style>
+
+
+
+    .page_404{  background:#fff;
+    }
+
+    .page_404  img{ width:100%;}
+
+    .four_zero_four_bg{
+
+        margin-left: 15%;
+        background-image: url('/404-page.gif');
+        height: 600px;
+        background-position: center;
+        background-repeat: no-repeat;
+
+    }
+
+    .four_zero_four_bg h1{
+        font-size:80px;
+    }
+ 
+    .four_zero_four_bg h3{
+        font-size:80px;
+    }
+			 
+    .link_404{			 
+        color: #fff!important;
+        padding: 10px 20px;
+        background: #39ac31;
+        margin: 20px 0;
+        display: inline-block;
+    }
+
+    .contant_box_404 {
+        margin-top:-50px;
+        margin-left: 16%;
+    }
+</style>
 
