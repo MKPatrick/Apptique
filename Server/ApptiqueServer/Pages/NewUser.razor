@@ -99,7 +99,7 @@
         if (!string.IsNullOrWhiteSpace(userModel.Username) || !string.IsNullOrWhiteSpace(userModel.Password))
         {
             success = true;
-            var result = await http.PostAsJsonAsync($"https://{DomainURL}/api/app/register", userModel);
+            var result = await http.PostAsJsonAsync($"http://{DomainURL}/api/app/register", userModel);
 
             if (!result.IsSuccessStatusCode)
             {

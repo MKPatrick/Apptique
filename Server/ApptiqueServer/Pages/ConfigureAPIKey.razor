@@ -1,0 +1,130 @@
+﻿@page "/ConfigureAPI"
+
+@using ApptiqueServer.Config
+@using System.Text.Json
+@using System.Text
+@using System.Timers
+@inject IConfiguration configuration
+@inject HttpClient http
+@inject NavigationManager navigate;
+
+
+
+
+
+
+<div style="margin-left: 32%; margin-top: 10%">
+
+    <p>Current API Key: &nbsp; &nbsp; @oldKey</p>
+    
+    <br />
+
+    <form>
+
+        <div class="group">
+            <input id="appName" type="text" required @bind-value="@ApiKey">
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label class="frm-label" for="appName">API Key</label>
+        </div>
+
+
+    </form>
+</div>
+
+<br />
+
+
+
+
+
+<div>
+    @if (success)
+    {
+        <p style="color: #ff4500; margin-left: 35%">&nbsp; API key changed..... Reloading! </p>
+
+
+    }
+    else
+    {
+        <p>&nbsp;</p>
+    }
+</div>
+
+
+<div style="margin-left: 40%">
+    <br/>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="() => AddOrUpdateAppSetting(sectionPath, ApiKey)">Set New API Key</MudButton>
+</div>
+
+
+
+@code {
+
+    private string ApiKey { get; set; }
+    private string oldKey { get; set; }
+    private const string sectionPath = "Secret:AppSecret";
+    private bool success = false;
+    Timer timer = new Timer();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        oldKey = configuration["Secret:AppSecret"];
+    }
+
+
+    public async Task AddOrUpdateAppSetting<T>(string sectionPathKey, T value)
+    {
+        try
+        {
+            var filePath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
+            string json = File.ReadAllText(filePath);
+            dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+
+            SetValueRecursively(sectionPathKey, jsonObj, value);
+
+            string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
+            File.WriteAllText(filePath, output);
+
+
+            success = true;
+
+            await Task.Delay(3000);
+
+            success = false;
+            navigate.NavigateTo("/",true);
+
+
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error writing app settings | {0}", ex.Message);
+        }
+    }
+
+
+
+    private static void SetValueRecursively<T>(string sectionPathKey, dynamic jsonObj, T value)
+    {
+        
+        var remainingSections = sectionPathKey.Split(":", 2);
+        var currentSection = remainingSections[0];
+
+        if (remainingSections.Length > 1)
+        {
+            var nextSection = remainingSections[1];
+            SetValueRecursively(nextSection, jsonObj[currentSection], value);
+        }
+        else
+        {
+            jsonObj[currentSection] = value;
+        }
+    }
+
+
+   
+ 
+
+}

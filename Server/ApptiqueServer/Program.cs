@@ -27,9 +27,25 @@ namespace ApptiqueServer
             builder.Services.AddAuthorizationCore();
             builder.Services.AddHttpClient();
             builder.Services.AddBlazoredSessionStorage();
+            builder.Services.Configure<ApiConfig>(builder.Configuration.GetSection("Secret"));
+            //builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
 
 
             var app = builder.Build();
+
+
+
+            var env = app.Services.GetService<IWebHostEnvironment>();
+
+
+            var config = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables()
+                .Build();
+
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
+using Newtonsoft.Json;
+
+
 
 namespace ApptiqueServer.Controller
 {
@@ -43,7 +46,7 @@ namespace ApptiqueServer.Controller
         public async Task<ActionResult> Register(UserModelDto request)
         {
             var userService = new UserService(_env, _configuration);
-            
+
             var user = new UserModel
             {
                 _id = ObjectId.GenerateNewId().ToString(),
@@ -114,6 +117,8 @@ namespace ApptiqueServer.Controller
 
             return Ok(user);
         }
+
+
 
 
     }

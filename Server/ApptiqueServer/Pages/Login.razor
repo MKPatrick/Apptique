@@ -20,19 +20,18 @@
 <h1>App Overview</h1>
 
 
-
-
 <head>
+    <title>Apptique</title>
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
-    <link rel="stylesheet" href="/css/login.css" />
+          href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"/>
+    <link rel="stylesheet" href="/css/login.css"/>
 </head>
 
 <body>
 
     <div class="video-bg">
         <video width="320" height="240" autoplay loop muted>
-            <source src="https://assets.codepen.io/3364143/7btrrd.mp4"
+            <source src="/adminbg.mp4"
                     type="video/mp4" />
             Your browser does not support the video tag.
         </video>
@@ -160,7 +159,9 @@
         {
             success = true;
 
-            string url = "https://localhost:62401/api/app/login";
+            string DomainURL = Configuration["HostDomain:DomainURL"];
+
+            string url = $"http://{DomainURL}/api/app/login";
 
 
 
@@ -202,7 +203,7 @@
 
         if (userServices.CreateAdminOnNewDatabase().Count == 0)
         {
-            http.PostAsJsonAsync("https://localhost:62401/api/app/create", user);
+            http.PostAsJsonAsync("http://localhost:9049/api/app/create", user);
         }
 
         
