@@ -8,6 +8,7 @@
 
 <p align="left">
 
+<br /> 
 
 ## **Releasing a NEW app to Apptique**
 
@@ -24,6 +25,7 @@
 
 - After the app upload is complete you should see all the apps as follows:
 
+<br /> 
 
 ## **Releasing an UPDATE to Apptique**
 
@@ -31,9 +33,6 @@
 When you click on the blue update icon in the list of all currently released apps, you should see all the versions of that app
 
  - To create an update click on the "Create Revision" tab
-
-
-You should see the following screen:
 
 - **IMPORTANT!!!**   The "Version Nr" should increment everytime and the version number has to be higher then the current released version that is already on apptique.
 
