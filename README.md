@@ -1,13 +1,15 @@
 <h1 align="center">🔥 Apptique 🔥</h1>
 <h3 align="center">A playstore alternative for APKs in a LAN</h3>
 
-<h3 align="left">Connect with me:</h3>
+<h3 align="left">Languages and Tools:</h3>
+<p align="left"> <a href="https://www.w3schools.com/cs/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg" alt="csharp" width="40" height="40"/> </a> <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> </p>
+
+
+
 <p align="left">
 
 #
 
-
-1.
 ## **Releasing a NEW app to Apptique**
 
 
@@ -23,26 +25,23 @@
 
 - After the app upload is complete you should see all the apps as follows:
 
-2.
+
 ## **Releasing an UPDATE to Apptique**
 
-- Click on the blue icon as shown in the image below:
 
+When you click on the blue update icon in the list of all currently released apps, you should see all the versions of that app
 
-When you click on the blue icon, you should see all the versions of that app, refer to the image below when we click on the blue update button for the "Apptique" app:
-
-
-To create an update click on the "Create Revision" tab, see image below:
+ - To create an update click on the "Create Revision" tab
 
 
 You should see the following screen:
 
-- **IMPORTANT!!!** The "Version Nr" should increment everytime and the version number has to be higher then the current released version that is already on apptique.
+- **IMPORTANT!!!**   The "Version Nr" should increment everytime and the version number has to be higher then the current released version that is already on apptique.
+
 - the "Change Set" is just a summary of what changed in the update, but is not required.
 
 - Once the update is finished uploading, you then should see the new app in the app list.
 </p>
 
-<h3 align="left">Languages and Tools:</h3>
-<p align="left"> <a href="https://www.w3schools.com/cs/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg" alt="csharp" width="40" height="40"/> </a> <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> </p>
+
 
