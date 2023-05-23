@@ -3,15 +3,6 @@
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
-# Apptique App
-
-User GUIDE
-
-# **Table of Contents**
-
-[1.Releasing a NEW APP to Apptique](#_Toc135733461)
-
-[2.Releasing an UPDATE to Apptique](#_Toc135733462)
 
 #
 
