@@ -1,59 +1,123 @@
 ﻿@using Orientation = Radzen.Orientation
 @using Variant = MudBlazor.Variant
 @inject IInstallerService installer;
+
+
+
+
 <div class="card">
+    
+    <div class="card-content">
+        
+        
+        <div class="app-icon">
 
+            <img src="@App.App.AppIcon" style="border-radius: 50%; height: 100px; width: 100px"/>
 
-    <RadzenCard Style="max-width: 420px">
-        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
-            <RadzenImage Path="@App.App.AppIcon" Style="border-radius: 50%; height: 100px; width: 100px;"/>
+        </div>
+
+        <div class="app-description">
+
             <RadzenStack Gap="0">
-                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Name</RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0" Style="color: #3c3a3a">Name</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" Style="color: #3c3a3a">
                     <b>@(App.App.AppName)</b>
                 </RadzenText>
-                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">Description</RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0" Style="color: #3c3a3a">Description</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" Style="color: #3c3a3a">
                     <b>@App.App.Description</b>
                 </RadzenText>
-                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">Version</RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1">
+                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0" Style="color: #3c3a3a">Version</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1" Style="color: #3c3a3a">
                     <b>@App.App.CurrentReleaseVersion</b>
                 </RadzenText>
             </RadzenStack>
-        </RadzenStack>
-        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0">
 
+        </div>
 
-            @if (App.CanBeInstalled)
-            {
-                <MudButton Variant="Variant.Filled" Class="btn w-100" Color="Color.Primary" Disabled="@IsBusy" OnClick="UpdateInstall">INSTALL</MudButton>
-                <br/>
-            }
-            else if (App.IsUpdateAvailable)
-            {
-                <MudButton Variant="Variant.Filled" Class="btn w-100" Disabled="@IsBusy" OnClick="UpdateInstall" Color="Color.Info">Update</MudButton>
-                <br/>
-            }
-            else
-            {
-                <div class="btn  w-100 btn-success disabled">Up To Date</div>
-            }
-
-
-            <br/>
-
-        </RadzenStack>
-
+    </div>
+    
+    <div class="card-buttons">
+        
+        @if (App.CanBeInstalled)
+        {
+            <MudButton Variant="Variant.Filled" Class="btn w-100" Color="Color.Primary" Disabled="@IsBusy" OnClick="UpdateInstall">INSTALL</MudButton>
+            <br />
+        }
+        else if (App.IsUpdateAvailable)
+        {
+            <MudButton Variant="Variant.Filled" Class="btn w-100" Disabled="@IsBusy" OnClick="UpdateInstall" Color="Color.Info">Update</MudButton>
+            <br />
+        }
+        else
+        {
+            <div class="btn  w-100 btn-success disabled" style="color: white">Up To Date</div>
+        }
+        
         @if (IsBusy)
         {
-            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"/>
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
         }
 
-    </RadzenCard>
+    </div>
+
+    
+    
 
 
 </div>
+
+
+
+
+<style>
+
+    .card {
+        max-width: 420px;
+
+        /*black*/
+        /*background: rgba( 8, 8, 8, 0.65 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 4.5px );
+        -webkit-backdrop-filter: blur( 4.5px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );*/
+
+
+        /*white*/
+        background: rgba( 255, 255, 255, 0.8 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 3.5px );
+        -webkit-backdrop-filter: blur( 3.5px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+        
+    }
+
+
+    .card-content {
+        
+        display: flex;
+        padding-top: 30px;
+        padding-left: 25px;
+        padding-right: 25px;
+        padding-bottom: 10px;
+        
+    }
+
+    .app-description  {
+
+        margin-left: 10%;
+
+    }
+
+    .card-buttons {
+        padding: 1rem;
+        justify-content: center;
+        padding-bottom: 25px;
+    }
+
+</style>
 
 @code {
 

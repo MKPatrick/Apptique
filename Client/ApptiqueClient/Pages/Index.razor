@@ -5,39 +5,86 @@
 @inject ISnackbar Snackbar
 
 
-<RefreshView OnRefresh="@HandleRefresh">
+<div class="video-bg">
+    <video width="320" height="240" autoplay loop muted>
+        <source src="/adminbg.mp4"
+                type="video/mp4" />
+        Your browser does not support the video tag.
+    </video>
+</div>
 
-
-    <MudCard>
+<div>
+    <MudCard Class="SearchCard">
         <MudCardContent>
             <MudItem xs="12" sm="6" md="4">
-                <MudAutocomplete T="string" Label="Search" @bind-Value="value2" SearchFunc="@Search2"
+                <MudAutocomplete T="string" Label="Search" @bind-Value="value2" La SearchFunc="@Search2"
                                  ResetValueOnEmptyText="true"
                                  CoerceText="@coerceText" CoerceValue="@coerceValue"
-                                 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary"/>
+                                 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
             </MudItem>
-            <br/>
+            <br />
         </MudCardContent>
     </MudCard>
+</div>
+
+
+
+
 
     <br/>
     <br/>
     <br/>
 
-    @{
+
+
+@{
         var filteredApps = apps.Where(a => string.IsNullOrEmpty(value2) || a.App.AppName.Contains(value2, StringComparison.InvariantCultureIgnoreCase)).ToList();
     }
     <Virtualize Items="filteredApps" Context="item">
         <ApptiqueClient.Components.AppComponent App="@item" AppStateChanged="AppStateChanged"/>
         <br/>
     </Virtualize>
-</RefreshView>
+
 
 <style>
 
-    body { background-color: #3B403B; }
+    body {
+        background-color: #3B403B;
+        margin: 0;
+    
+    }
 
- 
+    .video-bg {
+        position: fixed;
+        right: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+
+    .video-bg video {
+        width: 100%;
+        height: 100%;
+        -o-object-fit: cover;
+        object-fit: cover;
+    }
+
+    .search-container {
+        background-color: #3B403B; 
+        padding: 20px; 
+    }
+
+    .SearchCard {
+        background: rgba( 255, 255, 255, 0.8 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 3.5px );
+        -webkit-backdrop-filter: blur( 3.5px );
+        border-radius: 10px;
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+
+        
+    }
 
 </style>
 
