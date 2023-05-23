@@ -8,7 +8,6 @@
 
 <p align="left">
 
-#
 
 ## **Releasing a NEW app to Apptique**
 
