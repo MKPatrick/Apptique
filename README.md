@@ -16,6 +16,8 @@
 - This is when you want to release an app on the apptique app.
 
 - The "Package Name" as to be in a the following format: com.companyname.warehousechecklist
+ 
+ - A "Version Nr" has to be set as this will be used for update checking later when updates are released 
 
 - The "App Version Name" can be named anything to identify what the app is, for example: "Test Version" or "Release Version"
 
