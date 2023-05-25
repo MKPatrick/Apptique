@@ -51,7 +51,7 @@
             </div>
             
             
-            <div style="margin-left: 37%; color: var(--theme-color)">
+            <div style="margin-left: 39%; color: var(--theme-color)">
                 @app.AppName App Revisions
             </div>
 
@@ -112,7 +112,7 @@
             <div class="main-container">
                 <div class="main-header">
 
-                    <div class="header-menu" style="padding-left: 21%">
+                    <div class="header-menu">
                         <a class="main-header-link is-active" href="/AppRevisions/@AppID" @onclick="displayRevisions">Revisions</a>
                         <a class="main-header-link" href="/AppRevisions/@AppID" @onclick="displayNewRevision">Create Revision</a>
                     </div>
@@ -127,8 +127,9 @@
                         {
 
                             <div style="display: flex; flex-direction: row">
-                                <div class="content-section-title" style="margin-left: 13%;">Build Version</div>
-                                <div class="content-section-title" style="margin-left: 20%;">Build Release Date</div>
+                                <div class="content-section-title" style="margin-left: 9%;">Build Version</div>
+                                <div class="content-section-title" style="margin-left: 16%;">Build Release Date</div>
+                                <div class="content-section-title" style="margin-left: 19%;">Build Summary</div>
 
                             </div>
 
@@ -146,8 +147,12 @@
                                             @item.AppVersion
                                         </span>
 
+                                        <span class="status" style="margin-right: 10%">
+                                            @item.ReleaseDate.ToLongDateString()
+                                        </span>
+
                                         <span class="status">
-                                            @item.ReleaseDate.ToShortDateString()
+                                            @item.ChangeSet
                                         </span>
 
                                         <div class="button-wrapper">

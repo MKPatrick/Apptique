@@ -20,22 +20,14 @@ namespace ApptiqueServer.Models
         {
             get
             {
-                if (Revisions.Count > 0)
-                {
-                    return Revisions.OrderBy(x => x.AppVersion).Last().AppVersion;
-                }
-                return 0;
+                return Revisions.Count > 0 ? Revisions.OrderBy(x => x.AppVersion).Last().AppVersion : 0;
             }
         }
         public DateTime LastReleaseDate
         {
             get
             {
-                if (Revisions.Count > 0)
-                {
-                    return Revisions.OrderBy(x => x.AppVersion).Last().ReleaseDate;
-                }
-                return DateTime.MinValue;
+                return Revisions.Count > 0 ? Revisions.OrderBy(x => x.AppVersion).Last().ReleaseDate : DateTime.MinValue;
             }
         }
 

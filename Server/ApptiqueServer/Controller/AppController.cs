@@ -51,7 +51,8 @@ namespace ApptiqueServer.Controller
             {
                 _id = ObjectId.GenerateNewId().ToString(),
                 Username = request.Username,
-                Password = BCrypt.Net.BCrypt.HashPassword(request.Password)
+                Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
+
             };
             await userService.CreateNewUser(user);
 
@@ -72,8 +73,6 @@ namespace ApptiqueServer.Controller
 
             if (!BCrypt.Net.BCrypt.Verify(request.Password, existingUser.Password))
                 return BadRequest(new { message = "Invalid Username or Password" });
-
-
 
             var token = CreateToken(existingUser);
 
